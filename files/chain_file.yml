@@ -1,0 +1,20 @@
+nodes:
+  username: platon
+  password: Platon123!
+  ssh_port: 22
+  init:
+    p2p_port: 16789
+    rpc_port: 6789
+    members:
+    - host: 192.168.120.121
+    - host: 192.168.120.122
+    - host: 192.168.120.123
+    - host: 192.168.120.124
+  normal:
+    p2p_port: 16790
+    rpc_port: 6790
+    members:
+    - host: 192.168.120.121
+    - host: 192.168.120.122
+    - host: 192.168.120.123
+    - host: 192.168.120.124
