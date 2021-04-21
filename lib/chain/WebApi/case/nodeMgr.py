@@ -1,6 +1,6 @@
 import requests
-from common.utils import get_test_data
-from common.getConfig import get_env
+from ..common.utils import get_test_data
+from ..common.getConfig import get_env
 
 
 # header = {'Content-Type': 'multipart/form-data'}
