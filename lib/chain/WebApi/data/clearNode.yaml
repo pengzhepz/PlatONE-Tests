@@ -1,0 +1,12 @@
+---
+test:
+- case: 清理节点
+  path: /proxyApi/proxy/clearNode
+  paramters:
+    password: 123456
+    useDocker: 1
+    ip: 192.168.120.134
+    scriptPath: ~/linux2/scripts
+    userName: juzix
+  expect:
+    code: 200
