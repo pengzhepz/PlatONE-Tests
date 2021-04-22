@@ -11,7 +11,7 @@ CHAIN_FILE = os.path.join(BASE_DIR, 'files/chain_file.yml')     # chain config f
 DEPLOY_DIR = 'platone'                                          # platone deploy dir
 
 # selenium settings
-DRIVER = None
+DRIVER = 'chrome'
 GLOBAL_TIMEOUT = 30                                             # selenium global timeout
 IMAGE_DIR = './report/image/'
 

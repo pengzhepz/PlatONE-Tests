@@ -1,6 +1,7 @@
 import requests
-from ..common.utils import get_test_data
-from ..common.getConfig import get_env
+from lib.chain.WebApi.common.getConfig import get_env
+from lib.chain.WebApi.common.utils import get_test_data
+from lib.chain.WebApi.data.host import host
 
 
 def init_chain():
@@ -9,7 +10,6 @@ def init_chain():
     :return:
     """
 
-    host = get_env('test', 'host')
     test_list = list(get_test_data('../data/genesisChain.yaml'))
     params = test_list[0]['paramters']
     # print(host, test_list[0]['path'], params)
@@ -27,8 +27,3 @@ def init_chain():
 
     res = requests.post(host + test_list[0]['path'], files=file)
     return res
-
-
-if __name__ == '__main__':
-    i = init_chain()
-    print(i.status_code, i.text)

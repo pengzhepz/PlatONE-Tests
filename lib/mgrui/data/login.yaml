@@ -1,0 +1,61 @@
+---
+test:
+- case: 链创建人正常登录
+  paramters:
+    user: C:\Users\juzix\Desktop\lax19my0865mde2dlmujpa6l2z397mlwwrsn8lthur.json
+    pwd: 12345678
+    auth: True
+    ip: 192.168.120.133
+    port: 1331
+  expect:
+    id: 链创建者
+
+- case: 链管理员正常登录
+  paramters:
+    user: C:\Users\juzix\Desktop\lax19my0865mde2dlmujpa6l2z397mlwwrsn8lthur.json
+    pwd: 12345678
+    auth: True
+    ip: 192.168.120.133
+    port: 1331
+  expect:
+    id: 链管理员
+
+- case: 节点管理员正常登录
+  paramters:
+    user: C:\Users\juzix\Desktop\lax19my0865mde2dlmujpa6l2z397mlwwrsn8lthur.json
+    pwd: 12345678
+    auth: True
+    ip: 192.168.120.133
+    port: 1331
+  expect:
+    id: 节点管理员
+
+- case: 合约管理员正常登录
+  paramters:
+    user: C:\Users\juzix\Desktop\lax19my0865mde2dlmujpa6l2z397mlwwrsn8lthur.json
+    pwd: 12345678
+    auth: True
+    ip: 192.168.120.133
+    port: 1331
+  expect:
+    id: 合约管理员
+
+- case: 合约部署者正常登录
+  paramters:
+    user: C:\Users\juzix\Desktop\lax19my0865mde2dlmujpa6l2z397mlwwrsn8lthur.json
+    pwd: 12345678
+    auth: True
+    ip: 192.168.120.133
+    port: 1331
+  expect:
+    id: 合约部署者
+
+- case: 游客正常登录
+  paramters:
+    user: C:\Users\juzix\Desktop\lax19my0865mde2dlmujpa6l2z397mlwwrsn8lthur.json
+    pwd: 12345678
+    auth: True
+    ip: 192.168.120.133
+    port: 1331
+  expect:
+    id: 游客

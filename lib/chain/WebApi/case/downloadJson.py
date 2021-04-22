@@ -1,6 +1,7 @@
 import requests
-from ..common.utils import get_test_data
-from ..common.getConfig import get_env
+from lib.chain.WebApi.common.getConfig import get_env
+from lib.chain.WebApi.common.utils import get_test_data
+from lib.chain.WebApi.data.host import host
 
 
 def download_json():
@@ -9,7 +10,6 @@ def download_json():
     :return:
     """
 
-    host = get_env('test', 'host')
     test_list = list(get_test_data('../data/downloadFille.yaml'))
     params = test_list[0]['paramters']
     # print(host,test_list[0]['path'],params)

@@ -1,7 +1,7 @@
 import requests
-from ..common.utils import get_test_data
-from ..common.getConfig import get_env
-
+from lib.chain.WebApi.common.getConfig import get_env
+from lib.chain.WebApi.common.utils import get_test_data
+from lib.chain.WebApi.data.host import host
 
 # header = {'Content-Type': 'multipart/form-data'}
 # header = {}
@@ -14,7 +14,6 @@ def create_node():
     :return:
     """
 
-    host = get_env('test', 'host')
     test_list = list(get_test_data('../data/createNode.yaml'))
     params = test_list[0]['paramters']
 
