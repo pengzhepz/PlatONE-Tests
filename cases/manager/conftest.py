@@ -22,6 +22,7 @@ def driver() -> WebElement:
     driver.implicitly_wait(GLOBAL_TIMEOUT)
     yield driver
     # todo: 更换为更好的clean方法
+    # driver.close()
     # os.system('taskkill /IM chromedriver.exe /F')
     # os.system('taskkill /IM chrome.exe /F')
 

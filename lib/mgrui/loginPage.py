@@ -1,8 +1,6 @@
 import time
-
 from .basePage import BasePage
 from .locator import LoginLocator as loc
-from selenium.webdriver.support.ui import Select
 import os
 
 
@@ -15,10 +13,6 @@ class LoginPage(BasePage):
 
     def get_title(self):
         title = self.get_Text(loc.title_txt, mark='获取页面title')
-        return title
-
-    def get_url(self):
-        title = self.browser.current_url(loc.title_txt, mark='获取页面title')
         return title
 
     def login(self, username, pwd, auth=True):

@@ -53,6 +53,13 @@ class LoginLocator:
     user_phone = (By.ID,'normal_login_phone')
     register_nuser = (By.XPATH,'//*[@id="normal_login"]/div[7]/button')
 
+    # 页面list
+    home = (By.XPATH, '//*[text()="首页"]')
+    userManger = (By.XPATH, '//*[text()="用户管理"]')
+    nodeManger = (By.XPATH, '//*[text()="节点管理"]')
+    dealManger = (By.XPATH, '//*[text()="账本管理"]')
+    camera = (By.XPATH, '//*[text()="监控"]')
+
     # 检查locator
     login_errormsg_txt = (By.XPATH, '/html/body/div[2]')
     username_warningmsg_txt = (By.XPATH, '//*[@id="app"]/div/form/div[2]/div/div[2]')

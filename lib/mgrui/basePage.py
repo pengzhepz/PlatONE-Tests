@@ -217,3 +217,14 @@ class BasePage:
             logger.info('截屏成功,图片路径为{}'.format(filePath))
         except:
             logger.exception('截屏失败!')
+
+    def click_Text(self,text,mark=None):
+
+        from selenium.webdriver.common.by import By
+        elem = (By.XPATH, f'//*[text()={text}]')
+        try:
+            logger.info(f'{mark} 在元素 {elem} 中点击')
+            self.find_Element(elem).click()
+        except:
+            logger.exception('点击文本失败！')
+            self.save_webImgs(mark)
