@@ -45,3 +45,7 @@ class LoginPage(BasePage):
         self.click_Element(loc.logout)
         self.click_Element(loc.logout_2, mark='退出登录')
         time.sleep(1)
+
+    def index(self,id):
+        li = [loc.home,loc.userManger,loc.nodeManger,loc.dealManger,loc.camera]
+        self.click_Element(li[id],mark='点击首页列表')
