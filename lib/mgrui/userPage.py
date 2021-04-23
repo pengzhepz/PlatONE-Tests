@@ -6,7 +6,6 @@ from .locator.usermanger import UserMangerLocator as loc
 class UserPage(BasePage):
 
     def add_user(self, name, phone, email, address, power):
-        self.click_Text('用户管理',mark='选择用户管理')
         self.click_Element(loc.add_user, mark='添加用户')
         self.input_Text(loc.name, name, mark='输入用户名')
         self.input_Text(loc.phone, phone, mark='输入电话号码')
