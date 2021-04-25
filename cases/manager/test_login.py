@@ -14,7 +14,6 @@ def login_page(driver):
 
 @pytest.mark.skip('pass')
 class TestLogin:
-
     cases, parameters = get_data(r'../../lib/mgrui/data/login.yaml')
 
     @pytest.mark.parametrize('params,expected', parameters, ids=cases)

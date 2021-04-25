@@ -19,4 +19,3 @@ class UserPage(BasePage):
     def choose_power(self, power):
         self.click_Element(loc.power)
         self.click_Text(power, mark='选择权限')
-

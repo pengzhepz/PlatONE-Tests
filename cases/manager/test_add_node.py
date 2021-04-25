@@ -18,11 +18,15 @@ def node_page(driver):
     return NodePage(driver)
 
 
+@pytest.mark.skip('pass')
 class TestNode:
     cases, parameters = get_data(r'../../lib/mgrui/data/node.yaml')
 
     @pytest.mark.parametrize("params,expected", parameters, ids=cases)
     def test_add_node(self, node_page, params, expected):
+        """
+        TODO: 断言结果
+        """
         node_page.add_node(params['name'], params['desc'], params['rpc'], params['license_file'], params['ip'],
                            params['pwd'], params['host'], params['p2pport'], params['genesis_file'], params['script'],
                            params['user'], params['dock'])
