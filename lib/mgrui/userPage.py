@@ -7,6 +7,7 @@ class UserPage(BasePage):
 
     def add_user(self, name, phone, email, address, power):
         self.click_Element(loc.add_user, mark='添加用户')
+        time.sleep(1)
         self.input_Text(loc.name, name, mark='输入用户名')
         self.input_Text(loc.phone, phone, mark='输入电话号码')
         self.input_Text(loc.email, email, mark='输入电子邮箱')
@@ -16,4 +17,6 @@ class UserPage(BasePage):
         time.sleep(5)
 
     def choose_power(self, power):
+        self.click_Element(loc.power)
         self.click_Text(power, mark='选择权限')
+

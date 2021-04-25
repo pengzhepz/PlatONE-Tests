@@ -31,6 +31,7 @@ class LoginPage(BasePage):
         self.click_Element(loc.set_chain, mark='配置链')
         self.input_Text(loc.ip_address, ip, mark='设置ip')
         self.input_Text(loc.rpc_port, port, mark='设置端口号')
+        time.sleep(0.5)
         self.click_Element(loc.connect_chain, mark='连接链')
         time.sleep(1)
 

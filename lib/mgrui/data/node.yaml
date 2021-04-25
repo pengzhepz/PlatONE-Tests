@@ -1,0 +1,18 @@
+---
+test:
+- case: 添加节点
+  paramters:
+    name: test_node
+    desc: node_desc
+    rpc: 1332
+    license_file: C:\Users\juzix\Documents\platone-license
+    ip: 192.168.120.134
+    pwd: 123456
+    host: 192.168.120.134
+    p2pport: 11332
+    genesis_file: C:\Users\juzix\Desktop\lax19my0865mde2dlmujpa6l2z397mlwwrsn8lthur.json
+    dock: False
+    script: /linux2/scripts
+    user: juzix
+  expect:
+    id:

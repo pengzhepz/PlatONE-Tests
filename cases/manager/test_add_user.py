@@ -1,3 +1,4 @@
+import time
 import pytest
 from lib.mgrui.urls import ledger_url
 from lib.mgrui.userPage import UserPage
@@ -10,12 +11,14 @@ def user_page(driver):
     driver.get(ledger_url)
     lp = LoginPage(driver)
     lp.set_chain('192.168.120.133', '1331')
+    time.sleep(1)
     file = r'C:\Users\juzix\Desktop\lax19my0865mde2dlmujpa6l2z397mlwwrsn8lthur.json'
     lp.login(file, '12345678')
     lp.index(1)
     return UserPage(driver)
 
 
+@pytest.mark.skip('pass')
 class TestUser:
     cases, parameters = get_data(r'../../lib/mgrui/data/user.yaml')
 
