@@ -1,8 +1,8 @@
 import time
 import pytest
 from lib.mgrui.urls import ledger_url
-from lib.mgrui.nodePage import NodePage
-from lib.mgrui.loginPage import LoginPage
+from lib.mgrui.locator.nodePage import NodePage
+from lib.mgrui.locator.loginPage import LoginPage
 from lib.mgrui.data.get_ui_data import get_data
 
 
@@ -18,12 +18,12 @@ def node_page(driver):
     return NodePage(driver)
 
 
-@pytest.mark.skip('pass')
+
 class TestNode:
     cases, parameters = get_data(r'../../lib/mgrui/data/node.yaml')
 
     @pytest.mark.parametrize("params,expected", parameters, ids=cases)
-    def test_add_node(self, node_page, params, expected):
+    def test_add_node_success(self, node_page, params, expected):
         """
         TODO: 断言结果
         """

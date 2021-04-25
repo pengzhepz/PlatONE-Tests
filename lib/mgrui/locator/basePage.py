@@ -218,6 +218,7 @@ class BasePage:
         except:
             logger.exception('截屏失败!')
 
+    # 点击文本元素
     def click_Text(self, text, mark=None):
 
         from selenium.webdriver.common.by import By
@@ -229,8 +230,8 @@ class BasePage:
             logger.exception('点击文本失败！')
             self.save_webImgs(mark)
 
+    # 清楚输入框的文本（当clear无法使用时，使用）
     def clean_Text(self, el):
-        "第二种删除text的方法"
         from selenium.webdriver.common.keys import Keys
         ele = self.find_Element(el)
         ele.send_keys(Keys.CONTROL + 'a')  # CTRL + a ：全选

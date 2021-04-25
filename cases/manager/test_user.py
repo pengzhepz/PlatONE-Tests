@@ -1,8 +1,8 @@
 import time
 import pytest
 from lib.mgrui.urls import ledger_url
-from lib.mgrui.userPage import UserPage
-from lib.mgrui.loginPage import LoginPage
+from lib.mgrui.locator.userPage import UserPage
+from lib.mgrui.locator.loginPage import LoginPage
 from lib.mgrui.data.get_ui_data import get_data
 
 
@@ -18,7 +18,6 @@ def user_page(driver):
     return UserPage(driver)
 
 
-@pytest.mark.skip('pass')
 class TestUser:
     cases, parameters = get_data(r'../../lib/mgrui/data/user.yaml')
 
