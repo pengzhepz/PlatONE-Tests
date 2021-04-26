@@ -16,6 +16,8 @@ class LedgerPage(BasePage):
                         '//*[@id="root"]/div/section/section/div/div/main/div/div/div[2]/div/div/div/div/div/div/table/tbody/tr[1]/td[5]/div/div[1]/span/span')
     close_ledger_btn = (By.XPATH, '/html/body/div[4]/div/div/div/div[2]/div/div[2]/button[2]/span')
 
+    ledgerManger = (By.XPATH, '//*[text()="账本管理"]')
+
     def add_ledger(self, name, index):
         """
         添加账本
@@ -48,3 +50,6 @@ class LedgerPage(BasePage):
                             f'//*[@id="root"]/div/section/section/div/div/main/div/div/div[2]/div/div/div/div/div/div/table/tbody/tr[{index}]/td[5]/div/div[2]/span/span')
         self.click_Element(ledger_close_btn, mark='关闭账本')
         self.click_Text('确 认')
+
+    def select_ledger_index(self):
+        self.click_Element(self.ledgerManger,mark='选择账本管理页卡')

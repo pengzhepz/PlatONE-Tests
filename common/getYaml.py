@@ -1,13 +1,19 @@
 import yaml
 
 
-def get_test_data(data_path):
-    """
-    读取yaml文件
-    :param data_path: yaml文件路径
-    :return:
-    """
-    with open(data_path, 'r', encoding='utf-8') as f:
-        data = yaml.load(f.read(), Loader=yaml.SafeLoader)
-        test_data = data['test']
-    return test_data
+def get_data(test_data_path):
+    case = []  # 存储测试用例名称
+    param = []  # 存储请求对象
+    expected = []  # 存储预期结果
+    with open(test_data_path,'r',encoding='utf-8') as f:
+        dat = yaml.load(f.read(), Loader=yaml.SafeLoader)
+        test = dat['test']
+        for td in test:
+            case.append(td.get('case', ''))
+            param.append(td.get('paramters', {}))
+            expected.append(td.get('expect', {}))
+    parameters = zip(param, expected)
+    return case, list(parameters)
+
+# cases, parameters = get_test_data("login.yaml")
+# print(parameters)

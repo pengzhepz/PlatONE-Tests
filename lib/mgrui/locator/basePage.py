@@ -1,12 +1,10 @@
 import datetime
 import time
 from typing import List
-
 from loguru import logger
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
-
 from setting import IMAGE_DIR
 
 
@@ -236,3 +234,10 @@ class BasePage:
         ele = self.find_Element(el)
         ele.send_keys(Keys.CONTROL + 'a')  # CTRL + a ：全选
         ele.send_keys(Keys.DELETE)  # 删除
+
+    def is_Enabled(self, el, mark=None):
+        """
+        检查元素是否可用、可点击
+        """
+        logger.info(f'{mark} 在元素 {el} 中检查是否可点击、可用')
+        return self.find_Element(el).is_enabled()

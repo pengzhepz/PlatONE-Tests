@@ -1,30 +1,23 @@
-import time
 import pytest
-from lib.mgrui.urls import ledger_url
 from lib.mgrui.locator.userPage import UserPage
-from lib.mgrui.locator.loginPage import LoginPage
-from lib.mgrui.data.get_ui_data import get_data
 
 
 @pytest.fixture(scope='class')
-def user_page(driver):
-    driver.get(ledger_url)
-    lp = LoginPage(driver)
-    lp.set_chain('192.168.120.133', '1331')
-    time.sleep(1)
-    file = r'C:\Users\juzix\Desktop\lax19my0865mde2dlmujpa6l2z397mlwwrsn8lthur.json'
-    lp.login(file, '12345678')
-    lp.index(1)
-    return UserPage(driver)
+def user_page(login):
+    return UserPage(login)
 
 
 class TestUser:
-    cases, parameters = get_data(r'../../lib/mgrui/data/user.yaml')
+    # cases, parameters = get_data(r'../../lib/mgrui/data/user.yaml')
 
-    @pytest.mark.parametrize('params,expected', parameters, ids=cases)
-    def test_add_user_success(self, user_page, params, expected):
+    @pytest.mark.parametrize('name,phone,email,address,power', [
+        ('user100', '15820347777', '4477@qq.com', 'lax1knqnettnynusn08k2yg2uyzar6symvu6lpkw9c', '节点管理员')])
+    def test_add_user_success(self, user_page, name, phone, email, address, power):
         """
         TODO：用户管理页面的断言结果
         """
 
-        user_page.add_user(params['name'], params['phone'], params['email'], params['address'], params['power'])
+        user_page.add_user(name, phone, email, address, power)
+
+    def test_delete_user_success(self):
+        pass

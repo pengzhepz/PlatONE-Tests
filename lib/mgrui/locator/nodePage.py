@@ -1,5 +1,6 @@
-import os, time
-from basePage import BasePage
+import os
+import time
+from .basePage import BasePage
 from selenium.webdriver.common.by import By
 
 
@@ -30,11 +31,14 @@ class NodePage(BasePage):
     stop_btn = (By.XPATH, '//*[text()="禁用"]')
     delete_btn = (By.XPATH, '//*[text()="删除"]')
 
+    nodeManger = (By.XPATH, '//*[text()="节点管理"]')
+
     def add_node(self, name, desc, rpc, license_file, ip, pwd, host, p2pport, genesis_file, script, user,
                  docker=False):
         """
         添加节点的数据
         """
+        self.select_node_index()
         self.click_Element(self.add_node)
         time.sleep(1)
         self.input_Text(self.node_name_input, name, mark='输入节点名称')
@@ -63,3 +67,5 @@ class NodePage(BasePage):
         self.click_Element(self.submit_btn, mark='提交')
         time.sleep(10)
 
+    def select_node_index(self):
+        self.click_Element(self.nodeManger,mark='选择节点管理页卡')

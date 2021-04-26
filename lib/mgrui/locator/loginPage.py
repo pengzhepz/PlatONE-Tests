@@ -1,5 +1,5 @@
 import time
-from basePage import BasePage
+from .basePage import BasePage
 from selenium.webdriver.common.by import By
 import os
 
@@ -24,6 +24,7 @@ class LoginPage(BasePage):
     ip_address = (By.ID, 'connent_box_ip')
     rpc_port = (By.ID, 'connent_box_port')
     connect_chain = (By.CLASS_NAME, 'connent_box_button')
+    create_chain_btn = (By.XPATH, '//*[text()="创建链"]')
 
     # 创建钱包页面
     new_wallet_pwd = (By.ID, 'walletForm_password')
@@ -46,12 +47,7 @@ class LoginPage(BasePage):
     chain_pwd = (By.ID, 'chainForm_password')
     start_create_chain = (By.XPATH, '//*[@id="chainForm"]/div[7]/button')
 
-    # 首页list+退出登录
     home = (By.XPATH, '//*[text()="首页"]')
-    userManger = (By.XPATH, '//*[text()="用户管理"]')
-    nodeManger = (By.XPATH, '//*[text()="节点管理"]')
-    dealManger = (By.XPATH, '//*[text()="账本管理"]')
-    camera = (By.XPATH, '//*[text()="监控"]')
 
     logout_btn = (By.CLASS_NAME, 'avatar')
     confirm_logout_btn = (By.XPATH, '/html/body/div[3]/div/div/ul/li/a')
@@ -65,7 +61,7 @@ class LoginPage(BasePage):
         """
         self.click_Element(self.select_user_btn, mark='上传json文件')
         time.sleep(1)
-        path = os.path.abspath('../..') + '\\uploadjson.exe'  # 上传文件
+        path = os.path.abspath('..') + '\\uploadjson.exe'  # 上传文件
         os.system(fr'{path} {username}')
         self.input_Text(self.password_input, pwd, mark='输入密码')
         if auth:
@@ -83,7 +79,7 @@ class LoginPage(BasePage):
         self.input_Text(self.rpc_port, port, mark='设置端口号')
         time.sleep(0.5)
         self.click_Element(self.connect_chain, mark='连接链')
-        time.sleep(1)
+        time.sleep(2)
 
     def choose_no_auth(self):
         """
@@ -106,11 +102,26 @@ class LoginPage(BasePage):
         self.click_Element(self.confirm_logout_btn, mark='退出登录')
         time.sleep(1)
 
-    def index(self, index):
+    def create_wallet(self, pwd, confirm_pwd):
         """
-        点击登录后首页的左侧列表
-        :param index: 第几个（从0开始）
-        :return:
+        1.创建链
+        2.创建用户
         """
-        li = [self.home, self.userManger, self.nodeManger, self.dealManger, self.camera]
-        self.click_Element(li[index], mark='点击首页列表')
+        self.click_Element(self.set_chain_btn, mark='配置链')
+        self.click_Element(self.create_chain_btn, mark='创建链')
+
+        self.input_Text(self.new_wallet_pwd, pwd, mark='输入第一次密码')
+        self.input_Text(self.new_wallet_confirm_pwd, confirm_pwd, mark='输入二次密码')
+        self.click_Element(self.complete_create_wallet_btn, mark='创建用户')
+
+    def download_json(self):
+        """
+        下载用户json文件
+        """
+        self.click_Element(self.download_address_btn, mark='下载json文件')
+
+    def check_create_wallet(self):
+        """
+        下载json文件后，检查“下一步”是否点亮
+        """
+        return self.is_Enabled(self.next_btn, mark='下一步是否点亮')

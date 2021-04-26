@@ -1,8 +1,8 @@
-import os
+from lib.mgrui.urls import ledger_url
 import pytest
 from selenium import webdriver
 from selenium.webdriver.remote.webelement import WebElement
-
+from lib.mgrui.locator.loginPage import LoginPage
 from setting import DRIVER, GLOBAL_TIMEOUT
 
 drivers = {
@@ -13,6 +13,12 @@ drivers = {
     'Safari': None,
     '...': None
 }
+
+# 联盟后台登录账号
+chain_ip = '192.168.120.133'
+chain_port = '1331'
+file = r'C:\Users\juzix\Downloads\lax1xzk22g3p9xm59kjrjv2hm3ft9adjj7jmwsntad.json'
+file_pwd = '12345678'
 
 
 @pytest.fixture(scope='session', autouse=False)
@@ -25,6 +31,18 @@ def driver() -> WebElement:
     driver.close()
     # os.system('taskkill /IM chromedriver.exe /F')
     # os.system('taskkill /IM chrome.exe /F')
+
+
+@pytest.fixture(scope='class')
+def login(driver):
+    """
+    已登录页面
+    """
+    driver.get(ledger_url)
+    lp = LoginPage(driver)
+    lp.set_chain(chain_ip, chain_port)
+    lp.login(file, file_pwd)
+    return driver
 
 
 def pytest_collection_modifyitems(items):
