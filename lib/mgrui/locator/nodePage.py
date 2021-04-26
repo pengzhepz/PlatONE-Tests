@@ -63,19 +63,3 @@ class NodePage(BasePage):
         self.click_Element(self.submit_btn, mark='提交')
         time.sleep(10)
 
-
-"""
-    def connect_linux(self):
-        import paramiko
-        # 连接linux服务器
-        with paramiko.SSHClient() as ssh:
-            # 允许连接不在know_hosts文件中的主机
-            ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-            # 连接服务器
-            ssh.connect(hostname='192.168.120.134', port=22, username='juzix', password='123456')
-            # 执行命令
-            stdin, stdout, stderr = ssh.exec_command('ls')
-            # 获取命令结果
-            result = str(stdout.read(),encoding='utf-8')
-            print(result)
-"""
