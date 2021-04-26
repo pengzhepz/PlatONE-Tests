@@ -19,3 +19,6 @@ IMAGE_DIR = './report/image/'
 LOG_DIR = './report/file_{time}.log'
 LOG_SIZE = '500 MB'
 # LOG_FORMAT = '{time:YYYY-MM-DD at HH:mm:ss} | {level} | {message}'
+
+# mgrapi_host
+mgrapi_host = 'http://10.10.8.184'

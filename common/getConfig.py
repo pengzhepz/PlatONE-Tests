@@ -1,5 +1,6 @@
 from configparser import ConfigParser
 
+
 def get_env(title, subtitle):
     """
     :param title: 配置头部
@@ -19,4 +20,4 @@ def get_env(title, subtitle):
 
 
 if __name__ == '__main__':
-    print(get_env('test','host'))
+    print(get_env('test', 'host'))
