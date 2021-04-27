@@ -4,9 +4,13 @@ from selenium import webdriver
 from selenium.webdriver.remote.webelement import WebElement
 from lib.mgrui.locator.loginPage import LoginPage
 from setting import DRIVER, GLOBAL_TIMEOUT
+import time
 
+
+# option = webdriver.ChromeOptions()
+# option.add_argument('disable-infobars')  # 去掉正在监控中状态
 drivers = {
-    'chrome': webdriver.Chrome(chrome_options=webdriver.ChromeOptions()),
+    'chrome': webdriver.Chrome(),
     # 'edge': webdriver.Edge(executable_path='msedgedriver.exe'),
     'ie': None,
     'firefox': None,
@@ -17,7 +21,7 @@ drivers = {
 # 联盟后台登录账号
 chain_ip = '192.168.120.133'
 chain_port = '1331'
-file = r'C:\Users\juzix\Downloads\lax1xzk22g3p9xm59kjrjv2hm3ft9adjj7jmwsntad.json'
+file = r'C:\Users\juzix\Downloads\lax1k388y5ewl5wq222w5ueg8efl64u06fz86rlev9.json'
 file_pwd = '12345678'
 
 
@@ -42,6 +46,7 @@ def login(driver):
     lp = LoginPage(driver)
     lp.set_chain(chain_ip, chain_port)
     lp.login(file, file_pwd)
+    time.sleep(2)
     return driver
 
 

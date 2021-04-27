@@ -1,7 +1,6 @@
 import time
 from .basePage import BasePage
 from selenium.webdriver.common.by import By
-import os
 
 
 class LoginPage(BasePage):
@@ -59,10 +58,7 @@ class LoginPage(BasePage):
         """
         登录
         """
-        self.click_Element(self.select_user_btn, mark='上传json文件')
-        time.sleep(1)
-        path = os.path.abspath('..') + '\\uploadjson.exe'  # 上传文件
-        os.system(fr'{path} {username}')
+        self.upload_file(self.select_user_btn, username)
         self.input_Text(self.password_input, pwd, mark='输入密码')
         if auth:
             pass
@@ -79,7 +75,7 @@ class LoginPage(BasePage):
         self.input_Text(self.rpc_port, port, mark='设置端口号')
         time.sleep(0.5)
         self.click_Element(self.connect_chain, mark='连接链')
-        time.sleep(2)
+        time.sleep(1)
 
     def choose_no_auth(self):
         """

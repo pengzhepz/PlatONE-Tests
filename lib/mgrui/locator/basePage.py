@@ -2,6 +2,7 @@ import datetime
 import time
 from typing import List
 from loguru import logger
+from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
@@ -13,10 +14,7 @@ class BasePage:
     def __init__(self, driver: WebElement):
         self.driver = driver
 
-    def current_url(self):
-        return self.driver.currentURL
-
-    def wait_eleVisible(self, loc, timeout=20, poll_frequency=0.5, mark=None):
+    def wait_eleVisible(self, loc, timeout=10, poll_frequency=0.2, mark=None):
         """
         :param loc:元素定位表达;元组类型,表达方式(元素定位类型,元素定位方法)
         :param timeout:等待的上限
@@ -30,32 +28,12 @@ class BasePage:
             WebDriverWait(self.driver, timeout, poll_frequency).until(EC.visibility_of_element_located(loc))
             end = time.time()
             logger.info('等待时长:%.2f 秒' % (end - start))
+            return True
         except:
             logger.exception('{} 等待元素可见失败:{}'.format(mark, loc))
             # 截图
             self.save_webImgs(mark)
-            raise
-
-    # 等待元素不可见
-    def wait_eleNoVisible(self, loc, timeout=20, poll_frequency=0.5, mark=None):
-        """
-        :param loc:元素定位表达;元组类型,表达方式(元素定位类型,元素定位方法)
-        :param timeout:等待的上限
-        :param poll_frequency:轮询频率
-        :param mark:等待失败时,截图操作,图片文件中需要表达的功能标注
-        :return:None
-        """
-        logger.info('{} 等待元素不可见:{}'.format(mark, loc))
-        try:
-            start = time.time()
-            WebDriverWait(self.driver, timeout, poll_frequency).until_not(EC.visibility_of_element_located(loc))
-            end = time.time()
-            logger.info('等待时长:%.2f 秒' % (end - start))
-        except:
-            logger.exception('{} 等待元素不可见失败:{}'.format(mark, loc))
-            # 截图
-            self.save_webImgs(mark)
-            raise
+            raise NoSuchElementException
 
     # 查找一个元素element
     def find_Element(self, loc, mark=None) -> WebElement:
@@ -241,3 +219,24 @@ class BasePage:
         """
         logger.info(f'{mark} 在元素 {el} 中检查是否可点击、可用')
         return self.find_Element(el).is_enabled()
+
+    def check_toast(self, text):
+        from selenium.webdriver.common.by import By
+        x = (By.XPATH, f'//*[text()="{text}"]')
+        try:
+            if self.wait_eleVisible(x):
+                logger.info(f'找到toast提示语：{text}')
+                return True
+        except NoSuchElementException:
+            logger.exception(f'找不到该{text}toast提示，请检查文件以及标点符号！')
+            return False
+
+    def upload_file(self, loc, filepath):
+        import os
+        try:
+            self.click_Element(loc, mark='上传')
+            path = os.path.abspath('..') + '\\uploadjson.exe'  # 上传文件
+            os.system(fr'{path} {filepath}')
+            time.sleep(2)
+        except:
+            raise

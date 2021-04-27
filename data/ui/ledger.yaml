@@ -1,8 +1,0 @@
----
-test:
-- case: 添加账本
-  paramters:
-    name: testbill
-    id: 1
-  expect:
-    id:

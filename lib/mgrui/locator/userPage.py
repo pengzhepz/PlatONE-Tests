@@ -14,7 +14,7 @@ class UserPage(BasePage):
     user_address_input = (By.ID, 'normal_login_address')
     select_user_auth_btn = (By.CLASS_NAME, 'ant-select-selection-item')
     submit_btn = (By.CLASS_NAME, 'submit_btn')
-
+    delete_user_btn = (By.XPATH, '//*[text()="删除"]')
     userManger = (By.XPATH, '//*[text()="用户管理"]')
 
     def add_user(self, name, phone, email, address, power):
@@ -30,7 +30,6 @@ class UserPage(BasePage):
         self.input_Text(self.user_address_input, address, mark='输入地址')
         self.choose_power(power)
         self.click_Element(self.submit_btn)
-        time.sleep(5)
 
     def choose_power(self, power):
         """
@@ -42,3 +41,11 @@ class UserPage(BasePage):
 
     def select_user_index(self):
         self.click_Element(self.userManger, mark='选择用户管理页卡')
+
+    def delete_user(self, index):
+        self.select_user_index()
+        user_list = self.find_Elements(self.delete_user_btn)
+        user_list[index].click()
+        time.sleep(1)
+        self.click_Text('确 认')
+        time.sleep(2)
