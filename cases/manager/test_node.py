@@ -24,12 +24,24 @@ class TestNode:
                               pwd, host, p2pport, genesis_file, script,
                               user):
         """
-        添加节点（测试数据未准备好）
-        TODO: 断言结果
+        添加节点
+        TODO: 断言结果 && 数据清理
         """
-        node_page.add_node(name, desc, rpc, license_file, ip,
-                           pwd, host, p2pport, genesis_file, script,
-                           user)
+        try:
+            node_page.add_node(name, desc, rpc, license_file, ip,
+                               pwd, host, p2pport, genesis_file, script,
+                               user)
+        finally:
+            pass
+            """
+            from common.connectServer import connect_linux
+            print('开始清理数据......')
+            s = connect_linux('192.168.120.13','juzix','123456')  # TODO： 敏感信息不暴露
+            stdin, stdout, stderr = s.exec_command(f'cd ~/linux && rm -rf data/ conf/genesis.json platone-license')
+            stdin2, stdout2, stderr2 = s.exec_command(f'killall -9 platone')
+            # result = str(stdout.read(), encoding='utf-8')
+            # print(result)
+            """
 
     def test_edit_publicnd_rpc_port(self, node_page):
         """

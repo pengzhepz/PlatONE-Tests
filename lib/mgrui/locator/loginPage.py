@@ -33,18 +33,18 @@ class LoginPage(BasePage):
     next_btn = (By.XPATH, '//*[@id="root"]/div/div/div[3]/div[2]/div/div[2]/div[2]/div/div[3]/button')
 
     # 创建链页面
-    script_path = (By.ID, 'chainForm_scriptPath')
-    nodeIp = (By.ID, 'chainForm_nodeIp')
-    chain_rpc = (By.ID, 'chainForm_rpcPort')
-    license = (By.XPATH, 'ant-input-search-button')
-    useDock = (By.CLASS_NAME, 'ant-select-selection-item')
-    chain_user = (By.ID, 'chainForm_userName')
-    genesis_address = (By.ID, 'chainForm_creatorAddress')
-    desc = (By.ID, 'chainForm_nodeDesc')
-    nodep2p = (By.ID, 'chainForm_p2pPort')
-    server_ip = (By.ID, 'chainForm_serverIp')
-    chain_pwd = (By.ID, 'chainForm_password')
-    start_create_chain = (By.XPATH, '//*[@id="chainForm"]/div[7]/button')
+    script_path_input = (By.ID, 'chainForm_scriptPath')
+    nodeIp_input = (By.ID, 'chainForm_nodeIp')
+    chain_rpc_input = (By.ID, 'chainForm_rpcPort')
+    license_input = (By.XPATH, '//*[text()="上 传"]')
+    useDock_input = (By.CLASS_NAME, 'ant-select-selection-item')
+    chain_user_input = (By.ID, 'chainForm_userName')
+    genesis_address_input = (By.ID, 'chainForm_creatorAddress')
+    desc_input = (By.ID, 'chainForm_nodeDesc')
+    nodep2p_input = (By.ID, 'chainForm_p2pPort')
+    server_ip_input = (By.ID, 'chainForm_serverIp')
+    chain_pwd_input = (By.ID, 'chainForm_password')
+    start_create_chain_btn = (By.XPATH, '//*[@id="chainForm"]/div[7]/button')
 
     home = (By.XPATH, '//*[text()="首页"]')
 
@@ -98,7 +98,7 @@ class LoginPage(BasePage):
         self.click_Element(self.confirm_logout_btn, mark='退出登录')
         time.sleep(1)
 
-    def create_wallet(self, pwd, confirm_pwd):
+    def create_wallet(self, pwd=12345678, confirm_pwd=12345678):
         """
         1.创建链
         2.创建用户
@@ -108,7 +108,9 @@ class LoginPage(BasePage):
 
         self.input_Text(self.new_wallet_pwd, pwd, mark='输入第一次密码')
         self.input_Text(self.new_wallet_confirm_pwd, confirm_pwd, mark='输入二次密码')
+        time.sleep(1)
         self.click_Element(self.complete_create_wallet_btn, mark='创建用户')
+        # self.clean_Text('创建钱包')
 
     def download_json(self):
         """
@@ -121,3 +123,32 @@ class LoginPage(BasePage):
         下载json文件后，检查“下一步”是否点亮
         """
         return self.is_Enabled(self.next_btn, mark='下一步是否点亮')
+
+    def create_chain_1(self):
+        """
+        创建链step1:创建钱包，并下载创世地址json
+        """
+        self.create_wallet()  # 创建钱包
+        self.download_json()
+        self.click_Element(self.next_btn, mark='下一步')
+
+    def create_chain_2(self, script, ip, rpc, file, user, desc, p2pport, host, pwd, usedocker=False):
+        """
+        创建链step2：初始化链
+        """
+        self.input_Text(self.script_path_input, script, mark='输入链部署路径')
+        self.input_Text(self.nodeIp_input, ip, mark='输入节点ip')
+        self.input_Text(self.chain_rpc_input, rpc, mark='输入rpc端口')
+        self.upload_file(self.license_input, file)
+        if usedocker:
+            pass
+        else:
+            self.click_Text('是', mark='选择是/否docker部署')
+            self.click_Text('否', mark='选择否docker部署')
+        self.input_Text(self.chain_user_input, user, mark='输入服务器用户名')
+        self.input_Text(self.desc_input, desc, mark='输入链描述')
+        self.input_Text(self.nodep2p_input, p2pport, mark='输入p2p端口')
+        self.input_Text(self.server_ip_input, host, mark='输入服务器ip')
+        self.input_Text(self.chain_pwd_input, pwd, mark='输入服务器密码')
+        self.click_Element(self.start_create_chain_btn, mark='初始化链')
+        time.sleep(30)
