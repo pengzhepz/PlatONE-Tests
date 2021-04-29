@@ -5,7 +5,10 @@ from lib.env.host import Host
 
 
 @dataclass
-class Node(Host):
+class Infos:
+    username: str = None
+    password: str = None
+    ssh_port: int = 22
     p2p_port: int = None
     rpc_port: int = None
     ws_port: int = None
@@ -18,12 +21,19 @@ class Node(Host):
             if hasattr(node, k) and not getattr(node, k):
                 setattr(node, k, v)
 
+
+@dataclass
+class Node(Host):
+    p2p_port: int = None
+    rpc_port: int = None
+    ws_port: int = None
+
     def to_dict(self):
         return asdict(self)
 
 
 @dataclass
-class NodeGroup(Node):
+class NodeGroup(Infos):
     members: List[Node] = field(default_factory=[])
 
     def __post_init__(self):
