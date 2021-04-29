@@ -2,7 +2,7 @@
 test:
 - case: 链创建人正常登录
   paramters:
-    user: C:\Users\juzix\Downloads\lax1xzk22g3p9xm59kjrjv2hm3ft9adjj7jmwsntad.json
+    user: C:\Users\juzix\Downloads\chaincreater.json
     pwd: 12345678
     auth: True
     ip: 192.168.120.133
@@ -12,7 +12,7 @@ test:
 
 - case: 链管理员正常登录
   paramters:
-    user: C:\Users\juzix\Downloads\lax19my0865mde2dlmujpa6l2z397mlwwrsn8lthur.json
+    user: C:\Users\juzix\Downloads\chainmanger.json
     pwd: 12345678
     auth: True
     ip: 192.168.120.133
@@ -22,7 +22,7 @@ test:
 
 - case: 节点管理员正常登录
   paramters:
-    user: C:\Users\juzix\Downloads\lax1u4ep5urh9dqk0dt7884neer5sx9qmk8mmgqh8s.json
+    user: C:\Users\juzix\Downloads\nodemanger.json
     pwd: 12345678
     auth: True
     ip: 192.168.120.133
@@ -32,7 +32,7 @@ test:
 
 - case: 合约管理员正常登录
   paramters:
-    user: C:\Users\juzix\Downloads\lax14cdnujktj744h3ryf8nhrc533tk3mx488hf5mm.json
+    user: C:\Users\juzix\Downloads\contractmanger.json
     pwd: 12345678
     auth: True
     ip: 192.168.120.133
@@ -42,7 +42,7 @@ test:
 
 - case: 合约部署员正常登录
   paramters:
-    user: C:\Users\juzix\Downloads\lax1jf8nw0u223zt8td7eehpeln6v6defwatnhpzn2.json
+    user: C:\Users\juzix\Downloads\contractpublictor.json
     pwd: 12345678
     auth: True
     ip: 192.168.120.133
@@ -52,7 +52,7 @@ test:
 
 - case: 游客正常登录
   paramters:
-    user: C:\Users\juzix\Downloads\lax1v7x6366mwjykqhhmkjsagj6l7lsc46js3lud6l.json
+    user: C:\Users\juzix\Downloads\vistor.json
     pwd: 12345678
     auth: True
     ip: 192.168.120.133

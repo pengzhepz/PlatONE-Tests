@@ -18,7 +18,6 @@ class TestLogin:
     """
     cases, parameters = get_data(r'../../data/ui/login.yaml')  # 5条用例，各种身份登录
 
-    @pytest.mark.skip()
     @pytest.mark.parametrize('params,expected', parameters, ids=cases)
     def test_login_success(self, login_page, params, expected):
         """
@@ -47,7 +46,7 @@ class TestLogin:
             login_page.create_chain_2(script='/linux/scripts', ip='192.168.120.133', rpc='1331',
                                       file=r'C:\Users\juzix\Documents\platone-license', user='juzix', desc='webauto',
                                       p2pport='11331', host='192.168.120.133', pwd='123456')
-            assert login_page.check_toast('节点初始化失败') is True
+            assert login_page.check_text('节点初始化失败') is True
         finally:
             pass
             """

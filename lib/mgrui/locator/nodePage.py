@@ -29,6 +29,7 @@ class NodePage(BasePage):
     edit_public_btn = (By.XPATH, '//*[text()="修改为共识节点"]')
     stop_btn = (By.XPATH, '//*[text()="禁用"]')
     delete_btn = (By.XPATH, '//*[text()="删除"]')
+    start_btn = (By.XPATH, '//*[text()="启用"]')
     edit_submit_btn = (By.XPATH, '//*[@id="normal_login"]/div[4]/button')
     nodeManger = (By.XPATH, '//*[text()="节点管理"]')
 
@@ -59,7 +60,7 @@ class NodePage(BasePage):
         self.input_Text(self.node_script_input, script, mark='服务器文件路径')
         self.input_Text(self.server_user_input, user, mark='服务器用户名')
         self.click_Element(self.submit_btn, mark='提交')
-        time.sleep(30)  # 初始化节点
+        # time.sleep(30)  # 初始化节点
 
     def select_node_index(self):
         self.click_Element(self.nodeManger, mark='选择节点管理页卡')
@@ -123,7 +124,7 @@ class NodePage(BasePage):
         self.select_node_index()
         node_list = self.find_Elements(self.stop_btn)
         node_list[index].click()
-        self.clean_Text('确 认')
+        self.click_Text('确 认')
 
     def delete_node(self, index=0):
         """
@@ -133,4 +134,13 @@ class NodePage(BasePage):
         self.select_node_index()
         node_list = self.find_Elements(self.delete_btn)
         node_list[index].click()
-        self.clean_Text('确 认')
+        self.click_Text('确 认')
+
+    def start_node(self, index=0):
+        """
+        启动节点
+        """
+        self.select_node_index()
+        node_list = self.find_Elements(self.start_btn)
+        node_list[index].click()
+        self.click_Text('确 认')

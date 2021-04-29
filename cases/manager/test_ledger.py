@@ -1,5 +1,7 @@
 import pytest
 from lib.mgrui.locator.ledgerPage import LedgerPage
+import random
+import string
 
 
 @pytest.fixture(scope='class')
@@ -9,30 +11,81 @@ def ledger_page(login):
 
 class TestLedger:
 
+    def setup_method(self):
+        # 随机账本名
+        self.name = ''.join(random.sample(string.ascii_letters, 3))
+
     def test_add_ledger_success(self, ledger_page):
         """
-        添加账本
+        添加账本,仅选择一个共识节点
         """
-        ledger_page.add_ledger(name='tLedger')
-        assert ledger_page.check_toast('新建账本成功!') is True
+        ledger_page.add_ledger(self.name)
+        assert ledger_page.check_text('新建账本成功!') is True
 
     def test_close_ledger_success(self, ledger_page):
         """
         关闭账本
         """
         ledger_page.close_ledger()
-        assert ledger_page.check_toast('账本关闭成功!') is True
+        assert ledger_page.check_text('账本关闭成功!') is True
 
     def test_add_ledger_fail(self, ledger_page):
         """
-        仅选择观察者节点,创建账本
+        创建账本，仅选择观察者节点
         """
-        ledger_page.add_ledger('dledger', index=1)
-        assert ledger_page.check_add_node_fail('请至少添加一个共识节点') is True
+        ledger_page.add_ledger(self.name, index=1)
+        assert ledger_page.check_text('请至少添加一个共识节点') is True
 
     def test_altogether_ledger(self, ledger_page):
         """
         添加所有现存的节点的账本
         """
-        ledger_page.add_all('aledger')
-        assert ledger_page.check_toast('新建账本成功!') is True
+        ledger_page.add_specify_node(self.name)
+        assert ledger_page.check_text('新建账本成功!') is True
+
+    def test_enter_ledger_detail(self, ledger_page):
+        """
+        进入账本详情
+        """
+        ledger_page.enter_ledger_detail()
+        assert ledger_page.check_text('账本详情') is True
+
+    def test_nond_ledger(self, ledger_page):
+        """
+        不指定任何节点的账本添加
+        预期结果：添加失败
+        """
+        ledger_page.add_specify_node(self.name, auto=False)
+        assert ledger_page.check_text('请至少添加一个共识节点') is True
+
+    def test_no_publicnd_ledger(self, ledger_page):
+        """
+        添加账本，添加所有节点除了共识节点
+        预期结果：添加失败
+        """
+        ledger_page.add_specify_node(self.name, start=1)
+        assert ledger_page.check_text('请至少添加一个共识节点') is True
+
+    def test_repeat_add_ledger(self, ledger_page):
+        """
+        添加重名的账本
+        预期结果：添加失败
+        """
+        x = self.name
+        ledger_page.add_ledger(name=x)
+        import time
+        time.sleep(4)
+        ledger_page.add_ledger(name=x)
+        assert ledger_page.check_text('账本名称已存在') is True
+
+    def test_no_auth_add_ledger(self, specify_login):
+        """
+        无权限者添加账本
+        预期结果：没有账本管理入口，无法添加
+        """
+        spec_ledger_page = LedgerPage(specify_login)  # 指定账号登录
+        try:
+            spec_ledger_page.select_ledger_index()
+        except BaseException as b:
+            print(b)
+            assert spec_ledger_page.check_text('账本管理') is False

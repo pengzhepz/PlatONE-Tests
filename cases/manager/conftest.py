@@ -6,7 +6,6 @@ from lib.mgrui.locator.loginPage import LoginPage
 from setting import DRIVER, GLOBAL_TIMEOUT
 import time
 
-
 # option = webdriver.ChromeOptions()
 # option.add_argument('disable-infobars')  # 去掉正在监控中状态
 drivers = {
@@ -21,7 +20,7 @@ drivers = {
 # 联盟后台登录账号
 chain_ip = '192.168.120.133'
 chain_port = '1331'
-file = r'C:\Users\juzix\Downloads\lax1k388y5ewl5wq222w5ueg8efl64u06fz86rlev9.json'
+file = r'C:\Users\juzix\Downloads\chaincreater.json'
 file_pwd = '12345678'
 
 
@@ -46,6 +45,20 @@ def login(driver):
     lp = LoginPage(driver)
     lp.set_chain(chain_ip, chain_port)
     lp.login(file, file_pwd)
+    time.sleep(2)
+    return driver
+
+
+@pytest.fixture(scope='function')
+def specify_login(driver):
+    """
+    指定用户登录
+    """
+    spec_file = r'C:\Users\juzix\Downloads\nodemanger.json'
+    driver.get(ledger_url)
+    lp = LoginPage(driver)
+    lp.set_chain(chain_ip, chain_port)
+    lp.login(spec_file, file_pwd)
     time.sleep(2)
     return driver
 

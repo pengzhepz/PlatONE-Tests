@@ -117,6 +117,7 @@ class LoginPage(BasePage):
         下载用户json文件
         """
         self.click_Element(self.download_address_btn, mark='下载json文件')
+        time.sleep(2)
 
     def check_create_wallet(self):
         """
@@ -151,4 +152,4 @@ class LoginPage(BasePage):
         self.input_Text(self.server_ip_input, host, mark='输入服务器ip')
         self.input_Text(self.chain_pwd_input, pwd, mark='输入服务器密码')
         self.click_Element(self.start_create_chain_btn, mark='初始化链')
-        time.sleep(30)
+        # time.sleep(30)

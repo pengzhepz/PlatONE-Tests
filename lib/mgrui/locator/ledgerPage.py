@@ -21,23 +21,15 @@ class LedgerPage(BasePage):
     def add_ledger(self, name, index=0):
         """
         添加账本
+        index: 指定哪一个
         """
         self.select_ledger_index()
-        time.sleep(1)
         self.click_Text('新建账本', mark='点击添加账本')
         self.input_Text(self.ledger_name_input, name, mark='输入账本名字')
         node_list = self.find_Elements(self.choice_add_node_btn)
+        time.sleep(1)
         node_list[index].click()
         self.click_Text('提 交')
-
-    def choice_node(self, index):
-        """
-        创建账本，选择节点加入账本(停用)
-        """
-        self.select_ledger_index()
-        choice_node_btn = (
-            By.XPATH, f'//*[@id="normal_login_nodes"]/div/div/table/tbody/tr[{index}]/td[3]/div/div/span/span')
-        self.click_Element(choice_node_btn, mark='选择节点')
 
     def add_sub_node(self):
         """
@@ -54,26 +46,38 @@ class LedgerPage(BasePage):
         ledger_close_btn = (By.XPATH,
                             f'//*[@id="root"]/div/section/section/div/div/main/div/div/div[2]/div/div/div/div/div/div/table/tbody/tr[{index}]/td[5]/div/div[2]/span/span')
         self.click_Element(ledger_close_btn, mark='关闭账本')
+        time.sleep(1)
         self.click_Text('确 认')
 
     def select_ledger_index(self):
         self.click_Element(self.ledgerManger, mark='选择账本管理页卡')
-
-    def check_add_node_fail(self, text):
-        x = (By.XPATH, f'//*[text()="{text}"]')
-        return self.wait_eleVisible(x)
-
-    def add_all(self, name):
-        """
-        添加账本,添加所有已有的节点
-        """
-        # from selenium.webdriver.remote.webelement import WebElement
-        self.select_ledger_index()
         time.sleep(1)
+
+    def add_specify_node(self, name, start=None, end=None, auto=True):
+        """
+        添加账本,添加特定范围的节点
+        usage:[1,3]，添加第2个、第3个节点
+        auto: False不添加任何节点
+        """
+        self.select_ledger_index()
         self.click_Text('新建账本', mark='点击添加账本')
         self.input_Text(self.ledger_name_input, name, mark='输入账本名字')
-        node_list = self.find_Elements(self.choice_add_node_btn)
-        for i in node_list:
-            # if isinstance(WebElement, i):  # 判断是否是可用元素
-            i.click()
+        if auto:
+            node_list = self.find_Elements(self.choice_add_node_btn)
+            for i in node_list[start:end]:
+                time.sleep(1)
+                # from selenium.webdriver.remote.webelement import WebElement
+                # if isinstance(WebElement, i):  # 判断是否是可用元素
+                i.click()
+        else:
+            pass
         self.click_Text('提 交')
+
+    def enter_ledger_detail(self, index=1):
+        """
+        进入账本详情页
+        """
+        self.select_ledger_index()
+        x = (By.XPATH,
+             f'//*[@id="root"]/div/section/section/div/div/main/div/div/div[2]/div/div/div/div/div/div/table/tbody/tr[{index}]/td[2]/a')
+        self.click_Element(x, mark=f'点击第{index}个账本名，进入详情页')

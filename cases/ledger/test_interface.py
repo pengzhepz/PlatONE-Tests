@@ -4,15 +4,17 @@ from hexbytes import HexBytes
 from platone import Web3, HTTPProvider, platone, txpool, Account, miner, net, personal
 
 # rpc = 'http://10.10.8.209:6999'
-rpc = 'http://192.168.16.122:7789'
+# rpc = 'http://192.168.16.122:7789'
+rpc = 'http://192.168.120.133:1331'
 chain_id = 200
 hrp = 'lax'
 ledger = 'sys'
 # main_address, main_private_key = 'lax1jt7m9cs9ryqtqpt939yvhxlqfqc3dscdtvgx8k', 'f90fd6808860fe869631d978b0582bb59db6189f7908b578a886d582cb6fccfa'
 # user_address, user_private_key = 'lax1apg69eyemch5hxsfw4e2kj94e92la7vt2ucuwr', 'a98e6baea6233965a0740e20e626c5500ecf16121547e8255ee5a28a4f08fc57'
-main_address, main_private_key = 'lax1qwntufwpfyrlxhu2cswudp3mae7cafch73sw9q', '024809d955a209bee6a4021dfd0fa231ab5f56c55f763ba188078d3c89b55422'
+# main_address, main_private_key = 'lax1qwntufwpfyrlxhu2cswudp3mae7cafch73sw9q', '024809d955a209bee6a4021dfd0fa231ab5f56c55f763ba188078d3c89b55422'
+main_address, main_private_key = 'lax1k388y5ewl5wq222w5ueg8efl64u06fz86rlev9','46e6e7c1f5a64eb9afbb149c3367ee2b6f1562279651486b28bba871f9208261'
 user_address, user_private_key = 'lax14c5hquawr2ka62nlk4np4w2lxp3h43j7y535l3', 'dda163376448a56cbf4c272347a036bb187f6a5607e2fc1988839b38943c7b95'
-w3 = Web3(HTTPProvider(rpc), chain_id=chain_id)
+w3 = Web3(HTTPProvider(rpc), chain_id=chain_id, multi_ledger=True, encryption_mode='SM')
 platone = platone.Platone(w3)
 txpool = txpool.TxPool(w3)
 net = net.Net(w3)

@@ -1,4 +1,0 @@
-loguru~=0.5.1
-selenium~=3.141.0
-pytest~=4.6.6
-dacite~=1.0.2

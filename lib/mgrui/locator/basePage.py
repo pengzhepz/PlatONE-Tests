@@ -7,6 +7,7 @@ from selenium.webdriver.remote.webelement import WebElement
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.wait import WebDriverWait
 from setting import IMAGE_DIR
+from selenium.webdriver.common.by import By
 
 
 class BasePage:
@@ -14,7 +15,7 @@ class BasePage:
     def __init__(self, driver: WebElement):
         self.driver = driver
 
-    def wait_eleVisible(self, loc, timeout=10, poll_frequency=0.2, mark=None):
+    def wait_eleVisible(self, loc, timeout=30, poll_frequency=0.2, mark=None):
         """
         :param loc:元素定位表达;元组类型,表达方式(元素定位类型,元素定位方法)
         :param timeout:等待的上限
@@ -197,10 +198,10 @@ class BasePage:
     # 点击文本元素
     def click_Text(self, text, mark=None):
 
-        from selenium.webdriver.common.by import By
         elem = (By.XPATH, f'//*[text()="{text}"]')
         try:
             logger.info(f'{mark} 在元素 {elem} 中点击')
+            time.sleep(1)
             self.find_Element(elem).click()
         except:
             logger.exception('点击文本失败！')
@@ -220,7 +221,7 @@ class BasePage:
         logger.info(f'{mark} 在元素 {el} 中检查是否可点击、可用')
         return self.find_Element(el).is_enabled()
 
-    def check_toast(self, text):
+    def check_text(self, text):
         from selenium.webdriver.common.by import By
         x = (By.XPATH, f'//*[text()="{text}"]')
         try:
