@@ -89,3 +89,29 @@ class TestLedger:
         except BaseException as b:
             print(b)
             assert spec_ledger_page.check_text('账本管理') is False
+
+    def test_add_node2Ledger(self, ledger_page):
+        """
+        为已存在的账本，添加节点（此节点也已经同步完主节点的区块）
+        预期结果：可直接添加成功
+        """
+        ledger_page.enter_ledger_detail()  # 进入第一个账本
+        ledger_page.add_ledger_node(num=1)  # 加一个
+        assert ledger_page.check_text('添加节点成功!') is True
+
+    def test_modify_to_publicnd(self, ledger_page):
+        """
+        修改账本中的观察者节点为共识节点
+        """
+        ledger_page.enter_ledger_detail()
+        ledger_page.modify_2pulicnode(num=1)
+        assert ledger_page.check_text('修改成功') is True
+
+    def test_modify_tonormalnd(self, ledger_page):
+        """
+        修改账本中的共识节点为观察者节点
+        TODO： 未完成
+        """
+        ledger_page.enter_ledger_detail()
+        ledger_page.modify_2noramlnode(num=1)
+

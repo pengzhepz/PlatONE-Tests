@@ -17,6 +17,10 @@ class LedgerPage(BasePage):
     close_ledger_btn = (By.XPATH, '/html/body/div[4]/div/div/div/div[2]/div/div[2]/button[2]/span')
     choice_add_node_btn = (By.XPATH, '//*[text()="添加"]')
     ledgerManger = (By.XPATH, '//*[text()="账本管理"]')
+    new_ledger_node_btn = (By.XPATH, '新增节点')
+    add_btn = (By.XPATH, '添加')
+    to_public_btn = (By.XPATH, '修改为共识节点')
+    to_normal_btn = (By.XPATH, '修改为观察者节点')
 
     def add_ledger(self, name, index=0):
         """
@@ -81,3 +85,40 @@ class LedgerPage(BasePage):
         x = (By.XPATH,
              f'//*[@id="root"]/div/section/section/div/div/main/div/div/div[2]/div/div/div/div/div/div/table/tbody/tr[{index}]/td[2]/a')
         self.click_Element(x, mark=f'点击第{index}个账本名，进入详情页')
+
+    def add_ledger_node(self, num=1):
+        """
+        进入账本详情页--添加节点
+        :num ：添加节点的个数，至少1
+        """
+        self.click_Text(self.new_ledger_node_btn, mark='账本添加子节点')
+        node_list = self.find_Elements(self.add_btn)
+        try:
+            for i in range(num):
+                self.click_Element(node_list[i])
+        except IndexError as e:
+            print('个数越界！', e)
+
+    def modify_2pulicnode(self, num=1):
+        """
+        账本中，修改观察者节点为共识节点
+        """
+        node_list = self.find_Elements(self.to_public_btn, mark='找有多少个修改共识节点数')
+        try:
+            for i in range(num):
+                self.click_Element(node_list[i])
+                self.click_Text('确 认')
+        except IndexError as e:
+            print('个数越界！', e)
+
+    def modify_2noramlnode(self, num=1):
+        """
+        账本中，修改共识节点为观察者节点
+        """
+        node_list = self.find_Elements(self.to_normal_btn, mark='找有多少个修改共识节点数')
+        try:
+            for i in range(num):
+                self.click_Element(node_list[i])
+                self.click_Text('确 认')
+        except IndexError as e:
+            print('个数越界！', e)
