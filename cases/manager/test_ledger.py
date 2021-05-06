@@ -24,7 +24,7 @@ class TestLedger:
 
     def test_close_ledger_success(self, ledger_page):
         """
-        关闭账本
+        删除账本
         """
         ledger_page.close_ledger()
         assert ledger_page.check_text('账本关闭成功!') is True
@@ -52,7 +52,7 @@ class TestLedger:
 
     def test_nond_ledger(self, ledger_page):
         """
-        不指定任何节点的账本添加
+        不添加任何节点，然后创建账本
         预期结果：添加失败
         """
         ledger_page.add_specify_node(self.name, auto=False)
@@ -95,7 +95,7 @@ class TestLedger:
         为已存在的账本，添加节点（此节点也已经同步完主节点的区块）
         预期结果：可直接添加成功
         """
-        ledger_page.enter_ledger_detail()  # 进入第一个账本
+        ledger_page.enter_ledger_detail(index=1)  # 进入第一个账本
         ledger_page.add_ledger_node(num=1)  # 加一个
         assert ledger_page.check_text('添加节点成功!') is True
 
@@ -103,15 +103,45 @@ class TestLedger:
         """
         修改账本中的观察者节点为共识节点
         """
-        ledger_page.enter_ledger_detail()
+        ledger_page.enter_ledger_detail(index=1)
         ledger_page.modify_2pulicnode(num=1)
         assert ledger_page.check_text('修改成功') is True
 
     def test_modify_tonormalnd(self, ledger_page):
         """
         修改账本中的共识节点为观察者节点
-        TODO： 未完成
+        """
+        ledger_page.enter_ledger_detail(index=1)
+        ledger_page.modify_2noramlnode(num=1)
+        assert ledger_page.check_text('修改成功') is True
+
+    def test_delete_normalnd(self, ledger_page):
+        """
+        1.进入账本详情
+        2.删除其中一个观察者节点
+        """
+        ledger_page.enter_ledger_detail(index=2)
+        ledger_page.delete_node(num=1)
+        assert ledger_page.check_text('删除成功') is True
+
+    def test_recycle_author(self, ledger_page):
+        """
+        回收权限
         """
         ledger_page.enter_ledger_detail()
-        ledger_page.modify_2noramlnode(num=1)
+        ledger_page.re_authorize(index=2)
+        assert ledger_page.check_text('回收权限成功') is True
 
+    def test_authorize_success(self, ledger_page):
+        """
+        授权用户
+        """
+        ledger_page.enter_ledger_detail()
+        ledger_page.authorize(inidex=2)  # 对第二个用户授权
+        assert ledger_page.check_text('授权成功') is True
+
+    def test_no_author(self, ledger_page):
+        """
+        ：TODO： 没有权限操作账本
+        """
+        pass

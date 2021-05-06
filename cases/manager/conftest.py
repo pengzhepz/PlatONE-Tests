@@ -20,8 +20,9 @@ drivers = {
 # 联盟后台登录账号
 chain_ip = '192.168.120.133'
 chain_port = '1331'
-file = r'C:\Users\juzix\Downloads\chaincreater.json'
+file = r'C:\Users\juzix\Downloads\chaincreater.json'  # 通用登录
 file_pwd = '12345678'
+spec_file = r'C:\Users\juzix\Downloads\nodemanger.json'  # 指定账户登录，联合specify_login()函数使用
 
 
 @pytest.fixture(scope='session', autouse=False)
@@ -54,7 +55,6 @@ def specify_login(driver):
     """
     指定用户登录
     """
-    spec_file = r'C:\Users\juzix\Downloads\nodemanger.json'
     driver.get(ledger_url)
     lp = LoginPage(driver)
     lp.set_chain(chain_ip, chain_port)

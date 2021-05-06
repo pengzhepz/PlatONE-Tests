@@ -34,7 +34,8 @@ class BasePage:
             logger.exception('{} 等待元素可见失败:{}'.format(mark, loc))
             # 截图
             self.save_webImgs(mark)
-            raise NoSuchElementException
+            # raise NoSuchElementException
+            return False
 
     # 查找一个元素element
     def find_Element(self, loc, mark=None) -> WebElement:

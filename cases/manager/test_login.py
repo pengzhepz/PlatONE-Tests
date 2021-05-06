@@ -43,10 +43,10 @@ class TestLogin:
         """
         try:
             login_page.create_chain_1()
-            login_page.create_chain_2(script='/linux/scripts', ip='192.168.120.135', rpc='1331',
+            login_page.create_chain_2(script='/linux/scripts', ip='192.168.120.133', rpc='1331',
                                       file=r'C:\Users\juzix\Documents\platone-license', user='juzix', desc='webauto',
-                                      p2pport='11331', host='192.168.120.135', pwd='123456')
-            assert login_page.check_text('节点初始化失败') is True
+                                      p2pport='11331', host='192.168.120.133', pwd='123456')
+            # assert login_page.check_text('') is True
         finally:
             pass
             """

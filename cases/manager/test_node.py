@@ -11,15 +11,15 @@ class TestNode:
 
     # @pytest.mark.skip('节点信息已配置')
     @pytest.mark.parametrize('name, desc, rpc, license_file, ip,pwd, host, p2pport, genesis_file, script, user', [(
-            'test_node6',
+            'test_node2',
             'node_desc',
             '1335',
             r'C:\Users\juzix\Documents\platone-license',
-            '192.168.120.134',
+            '192.168.120.135',
             '123456',
-            '192.168.120.134',
+            '192.168.120.135',
             '11335',
-            r'C:\Users\juzix\Documents\genesis.json', '/linux3/scripts',
+            r'C:\Users\juzix\Documents\genesis.json', '/linux/scripts',
             'juzix')])
     def test_add_node_success(self, node_page, name, desc, rpc, license_file, ip,
                               pwd, host, p2pport, genesis_file, script,

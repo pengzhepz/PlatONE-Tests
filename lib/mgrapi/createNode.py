@@ -31,11 +31,11 @@ def create_node(genesis_filename, genesis_filepath, license_filename, license_fi
             'desc': (None, desc), 'ip': (None, ip),
             'nodeId': (None, nodeId), 'nodeIp': (None, nodeIp),
             'nodeName': (None, nodeName),
-            'p2pPort': (None, p2pPort), 'password': (None, userName),
-            'rpcPort': (None, password),
-            'scriptPath': (None, rpcPort), 'useDocker': (None, scriptPath),
-            'smFlg': (None, useDocker),
-            'userName': (None, smFlg)}
+            'p2pPort': (None, p2pPort), 'password': (None, password),
+            'rpcPort': (None, rpcPort),
+            'scriptPath': (None, scriptPath), 'useDocker': (None, useDocker),
+            'smFlg': (None, smFlg),
+            'userName': (None, userName)}
 
     res = requests.post(mgrapi_host + '/proxyApi/proxy/addNode', files=file)
     return res
