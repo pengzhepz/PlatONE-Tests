@@ -9,13 +9,13 @@ def user_page(login):
 
 class TestUser:
 
-    # @pytest.mark.skip('有bug？？之前存在的用户名、地址不能再次添加')
+    # @pytest.mark.skip('之前存在的用户名、地址不能再次添加')
     @pytest.mark.parametrize('name,phone,email,address,power', [
         ('user113', '15820347773', '447174@qq.com', 'lax1vf83f6yyzxqt6uerpfwcarvj9vtun8g4fdmkhq', '节点管理员')])
     def test_add_user_success(self, user_page, name, phone, email, address, power):
         """
         添加用户
-        TODO： 测试数据未准备好
+        TODO： 测试数据不能重复使用，需优化
         """
         user_page.add_user(name, phone, email, address, power)
         assert user_page.check_text('新增用户成功!') is True

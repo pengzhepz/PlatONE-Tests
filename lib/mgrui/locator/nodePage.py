@@ -27,6 +27,7 @@ class NodePage(BasePage):
     # 节点操作
     edit_btn = (By.XPATH, '//*[text()="修改"]')
     edit_public_btn = (By.XPATH, '//*[text()="修改为共识节点"]')
+    edit_normal_btn = (By.XPATH, '//*[text()="修改为观察者节点"]')
     stop_btn = (By.XPATH, '//*[text()="禁用"]')
     delete_btn = (By.XPATH, '//*[text()="删除"]')
     start_btn = (By.XPATH, '//*[text()="启用"]')
@@ -107,14 +108,16 @@ class NodePage(BasePage):
         self.select_node_index()
         node_list = self.find_Elements(self.edit_public_btn)
         node_list[index].click()
-        self.clean_Text('确 认')
+        self.click_Text('确 认')
 
     def to_normalnd(self, index=0):
         """
         修改共识节点为观察者节点
-        TODO： 有bug，暂时不作调试
         """
         self.select_node_index()
+        node_list = self.find_Elements(self.edit_normal_btn)
+        node_list[index].click()
+        self.click_Text('确 认')
 
     def stop_node(self, index=0):
         """

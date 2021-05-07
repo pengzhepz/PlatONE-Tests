@@ -17,12 +17,11 @@ drivers = {
     '...': None
 }
 
-# 联盟后台登录账号
+# 联盟后台登录账号(通用)
 chain_ip = '192.168.120.133'
 chain_port = '1331'
 file = r'C:\Users\juzix\Downloads\chaincreater.json'  # 通用登录
 file_pwd = '12345678'
-spec_file = r'C:\Users\juzix\Downloads\nodemanger.json'  # 指定账户登录，联合specify_login()函数使用
 
 
 @pytest.fixture(scope='session', autouse=False)
@@ -31,7 +30,6 @@ def driver() -> WebElement:
     driver.maximize_window()
     driver.implicitly_wait(GLOBAL_TIMEOUT)
     yield driver
-    # todo: 更换为更好的clean方法
     driver.close()
     # os.system('taskkill /IM chromedriver.exe /F')
     # os.system('taskkill /IM chrome.exe /F')
@@ -53,8 +51,25 @@ def login(driver):
 @pytest.fixture(scope='function')
 def specify_login(driver):
     """
+    test_ledger.py::test_no_auth_add_ledger
     指定用户登录
     """
+    spec_file = r'C:\Users\juzix\Downloads\nodemanger.json'
+    driver.get(ledger_url)
+    lp = LoginPage(driver)
+    lp.set_chain(chain_ip, chain_port)
+    lp.login(spec_file, file_pwd)
+    time.sleep(2)
+    return driver
+
+
+@pytest.fixture(scope='function')
+def no_author_login(driver):
+    """
+    test_ledger.py::test_no_author
+    指定用户登录
+    """
+    spec_file = r'C:\Users\juzix\Downloads\lax1zdy7ncacud4qxaj7v5j5w4dlveuwhvpk2cguhs.json'
     driver.get(ledger_url)
     lp = LoginPage(driver)
     lp.set_chain(chain_ip, chain_port)

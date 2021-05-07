@@ -140,8 +140,11 @@ class TestLedger:
         ledger_page.authorize(inidex=2)  # 对第二个用户授权
         assert ledger_page.check_text('授权成功') is True
 
-    def test_no_author(self, ledger_page):
+    def test_no_author(self, no_author_login):
         """
-        ：TODO： 没有权限操作账本
+        ：TODO： 跟test_recycle_author方法紧密关联，得解耦
         """
-        pass
+        spec_ledger_login = LedgerPage(no_author_login)
+        spec_ledger_login.enter_ledger_detail(index=1)
+        spec_ledger_login.add_ledger_node(num=1)
+        assert spec_ledger_login.check_text('权限拒绝') is True

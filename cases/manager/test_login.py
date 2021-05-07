@@ -39,7 +39,7 @@ class TestLogin:
     def test_create_chain(self, login_page):
         """
         创建链
-        TODO: 测试数据有问题，链已存在 && 数据清理
+        TODO: 断言
         """
         try:
             login_page.create_chain_1()
