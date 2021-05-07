@@ -65,14 +65,17 @@ class NodePage(BasePage):
 
     def select_node_index(self):
         self.click_Element(self.nodeManger, mark='选择节点管理页卡')
+        time.sleep(1)
 
-    def edit_rpc_port(self, rpc, index=0):
+    def edit_rpc_port(self, rpc, index=1):
         """
-        编辑节点rpc端口，默认第一个
+        编辑节点rpc端口
         """
         self.select_node_index()
         node_list = self.find_Elements(self.edit_btn)
+        time.sleep(1)
         node_list[index].click()
+        time.sleep(1)
         self.clean_Text(self.node_rpc_input)
         self.input_Text(self.node_rpc_input, rpc)
         self.click_Element(self.edit_submit_btn)
@@ -83,18 +86,22 @@ class NodePage(BasePage):
         """
         self.select_node_index()
         node_list = self.find_Elements(self.edit_btn)
+        time.sleep(1)
         node_list[index].click()
+        time.sleep(1)
         self.clean_Text(self.node_host_input)
         self.input_Text(self.node_host_input, ip)
         self.click_Element(self.edit_submit_btn)
 
     def edit_normalnd_port(self, port, p2pport, index=1):
         """
-        修改观察者节点ip
+        修改观察者节点rpc和p2p端口
         """
         self.select_node_index()
         node_list = self.find_Elements(self.edit_btn)
+        time.sleep(1)
         node_list[index].click()
+        time.sleep(1)
         self.clean_Text(self.node_rpc_input)
         self.input_Text(self.node_rpc_input, port)
         self.clean_Text(self.node_p2pport_input)
@@ -106,8 +113,12 @@ class NodePage(BasePage):
         修改观察者节点为共识节点
         """
         self.select_node_index()
-        node_list = self.find_Elements(self.edit_public_btn)
-        node_list[index].click()
+        try:
+            node_list = self.find_Elements(self.edit_public_btn)
+            node_list[index].click()
+        except IndexError as e:
+            print('个数越界！',e)
+        time.sleep(1)
         self.click_Text('确 认')
 
     def to_normalnd(self, index=0):
@@ -115,8 +126,12 @@ class NodePage(BasePage):
         修改共识节点为观察者节点
         """
         self.select_node_index()
-        node_list = self.find_Elements(self.edit_normal_btn)
-        node_list[index].click()
+        try:
+            node_list = self.find_Elements(self.edit_normal_btn)
+            node_list[index].click()
+        except IndexError as e:
+            print('个数越界！',e)
+        time.sleep(1)
         self.click_Text('确 认')
 
     def stop_node(self, index=0):
@@ -126,7 +141,9 @@ class NodePage(BasePage):
 
         self.select_node_index()
         node_list = self.find_Elements(self.stop_btn)
+        time.sleep(1)
         node_list[index].click()
+        time.sleep(1)
         self.click_Text('确 认')
 
     def delete_node(self, index=0):
@@ -136,7 +153,9 @@ class NodePage(BasePage):
 
         self.select_node_index()
         node_list = self.find_Elements(self.delete_btn)
+        time.sleep(1)
         node_list[index].click()
+        time.sleep(1)
         self.click_Text('确 认')
 
     def start_node(self, index=0):
@@ -145,5 +164,7 @@ class NodePage(BasePage):
         """
         self.select_node_index()
         node_list = self.find_Elements(self.start_btn)
+        time.sleep(1)
         node_list[index].click()
+        time.sleep(1)
         self.click_Text('确 认')

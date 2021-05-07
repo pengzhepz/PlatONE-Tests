@@ -24,6 +24,7 @@ class LedgerPage(BasePage):
 
     auth_btn = (By.XPATH, '//*[@id="root"]/div/section/section/div/div/main/div/div/div[1]/div[2]/div/div[2]/button')
     re_auth_btn = (By.XPATH, '//*[@id="root"]/div/section/section/div/div/main/div/div/div[1]/div[2]/div/div[3]/button')
+    close_btn = (By.CLASS_NAME, 'ant-modal-close-x')
 
     def add_ledger(self, name, index=0):
         """
@@ -85,6 +86,7 @@ class LedgerPage(BasePage):
         进入账本详情页
         """
         self.select_ledger_index()
+        time.sleep(3)  # 初始化要时间
         x = (By.XPATH,
              f'//*[@id="root"]/div/section/section/div/div/main/div/div/div[2]/div/div/div/div/div/div/table/tbody/tr[{index}]/td[2]/a')
         self.click_Element(x, mark=f'点击第{index}个账本名，进入详情页')
@@ -143,14 +145,19 @@ class LedgerPage(BasePage):
         except IndexError as e:
             print('个数越界！', e)
 
-    def authorize(self, inidex=1):
+    def authorize(self, index=1):
         """
         授权
         """
         self.click_Element(self.auth_btn, mark='授权')
-        x = (By.XPATH,
-             f'//*[@id="root"]/div/section/section/div/div/main/div/div/div[4]/div/div[2]/div/div[2]/div[2]/div[1]/div/div/div/div/div/div/table/tbody/tr[{inidex}]/td[3]/div/div/span/span')
-        self.click_Element(x, mark='对第x个用户授权')
+        time.sleep(1)
+        if index == 1:
+            x = (By.XPATH,
+                 f'//*[@id="root"]/div/section/section/div/div/main/div/div/div[4]/div/div[2]/div/div[2]/div[2]/div[1]/div/div/div/div/div/div/table/tbody/tr/td[3]/div/div/span/span')
+        else:
+            x = (By.XPATH,
+                 f'//*[@id="root"]/div/section/section/div/div/main/div/div/div[4]/div/div[2]/div/div[2]/div[2]/div[1]/div/div/div/div/div/div/table/tbody/tr[{index}]/td[3]/div/div/span/span')
+        self.click_Element(x)
 
     def re_authorize(self, index=1):
         """
@@ -158,6 +165,14 @@ class LedgerPage(BasePage):
         """
         self.click_Element(self.re_auth_btn, mark='回收权限')
         time.sleep(1)
-        x = (By.XPATH,
-             f'//*[@id="root"]/div/section/section/div/div/main/div/div/div[4]/div/div[2]/div/div[2]/div[2]/div[1]/div/div/div/div/div/div/table/tbody/tr[{index}]/td[3]')
-        self.click_Element(x, mark='对第x个用户回收权限')
+        if index == 1:
+            x = (By.XPATH,
+                 f'//*[@id="root"]/div/section/section/div/div/main/div/div/div[4]/div/div[2]/div/div[2]/div[2]/div[1]/div/div/div/div/div/div/table/tbody/tr/td[3]/div/div/span/span')
+        else:
+            x = (By.XPATH,
+                 f'//*[@id="root"]/div/section/section/div/div/main/div/div/div[4]/div/div[2]/div/div[2]/div[2]/div[1]/div/div/div/div/div/div/table/tbody/tr[{index}]/td[3]/div/div/span/span')
+        self.click_Element(x)
+
+    def close_ledger_window(self):
+        # 关闭新建账本窗口按钮
+        self.click_Element(self.close_btn)

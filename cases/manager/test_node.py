@@ -11,17 +11,17 @@ class TestNode:
 
     # @pytest.mark.skip('节点信息已配置')
     @pytest.mark.parametrize('name, desc, rpc, license_file, ip,pwd, host, p2pport, genesis_file, script, user', [(
-            'test_node2',
+            'node10',
             'node_desc',
-            '1335',
+            '1347',
             r'C:\Users\juzix\Documents\platone-license',
-            '192.168.120.135',
+            '192.168.120.134',
             '123456',
-            '192.168.120.135',
-            '11335',
+            '192.168.120.134',
+            '11347',
             r'C:\Users\juzix\Documents\genesis.json', '/linux/scripts',
             'juzix')])
-    def test_add_node_success(self, node_page, name, desc, rpc, license_file, ip,
+    def test_01_add_node_success(self, node_page, name, desc, rpc, license_file, ip,
                               pwd, host, p2pport, genesis_file, script,
                               user):
         """
@@ -46,28 +46,29 @@ class TestNode:
             # print(result)
             """
 
-    def test_edit_publicnd_rpc_port(self, node_page):
+    def test_02_edit_publicnd_rpc_port(self, node_page):
         """
         修改共识节点的rpc端口
         """
-        node_page.edit_rpc_port('1333')
+        node_page.edit_rpc_port('1361')
         assert node_page.check_text('操作成功!') is True
 
-    def test_edit_normalnd_ip(self, node_page):
+    def test_03_edit_normalnd_ip(self, node_page):
         """
         修改观察者节点的ip地址
         """
         node_page.edit_normalnd_ip('192.168.120.135')
         assert node_page.check_text('操作成功!') is True
 
-    def test_normalnd_ports(self, node_page):
+    def test_04_normalnd_ports(self, node_page):
         """
         修改观察者节点的端口，rpc/p2pport
         """
-        node_page.edit_normalnd_port('1335', '11335')
+        node_page.edit_normalnd_port('1350', '11350')
         assert node_page.check_text('操作成功!') is True
 
-    def test_normalnd_publicnd(self, node_page):
+    @pytest.mark.skip('跳过,数据受限')
+    def test_05_normalnd_publicnd(self, node_page):
         """
         修改观察者节点为共识节点
         TODO： 断言
@@ -75,7 +76,8 @@ class TestNode:
         node_page.to_publicnd()
         # assert node_page.check_text('操作成功!') is True
 
-    def test_publicnd_normal(self, node_page):
+    @pytest.mark.skip('跳过,数据受限')
+    def test_06_publicnd_normal(self, node_page):
         """
         1.仅有2个共识节点
         2.共识节点修改为观察者节点
@@ -84,7 +86,7 @@ class TestNode:
         node_page.to_normalnd()
         # assert node_page.check_text('操作成功!') is True
 
-    def test_stop_node(self, node_page):
+    def test_07_stop_node(self, node_page):
         """
         禁用节点
         """
@@ -92,14 +94,14 @@ class TestNode:
         node_page.stop_node()
         assert node_page.check_text('节点禁用成功!') is True
 
-    def test_start_node(self, node_page):
+    def test_08_start_node(self, node_page):
         """
         禁用后，重新启动节点
         """
         node_page.start_node()
         assert node_page.check_text('节点启用成功!') is True
 
-    def test_delete_node(self, node_page):
+    def test_09_delete_node(self, node_page):
         """
         删除节点
         """

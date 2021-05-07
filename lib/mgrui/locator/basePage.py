@@ -12,7 +12,7 @@ from selenium.webdriver.common.by import By
 
 class BasePage:
 
-    def __init__(self, driver: WebElement):
+    def __init__(self, driver):
         self.driver = driver
 
     def wait_eleVisible(self, loc, timeout=30, poll_frequency=0.2, mark=None):
