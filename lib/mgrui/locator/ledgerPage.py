@@ -175,4 +175,7 @@ class LedgerPage(BasePage):
 
     def close_ledger_window(self):
         # 关闭新建账本窗口按钮
-        self.click_Element(self.close_btn)
+        try:
+            self.click_Element(self.close_btn)
+        except:
+            pass

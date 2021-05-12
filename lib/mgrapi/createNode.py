@@ -1,11 +1,14 @@
 import requests
 from setting import mgrapi_host
+from platone.node import Node
+from platone import HTTPProvider, Web3
 
 
 def create_node(genesis_filename, genesis_filepath, license_filename, license_filepath, desc, ip, nodeId, nodeIp,
-                nodeName, p2pPort, userName, password, rpcPort, scriptPath, useDocker, smFlg):
+                nodeName, p2pPort, userName, password, rpcPort, scriptPath, useDocker, smFlg, chain_rpc, chain_address,
+                privatekey, chain_id=200):
     """
-    创建节点
+    创建节点,并加入到链中
     :param genesis_filename: 创世文件名字
     :param genesis_filepath: 创世文件路径
     :param license_filename: 证书文件名
@@ -36,6 +39,25 @@ def create_node(genesis_filename, genesis_filepath, license_filename, license_fi
             'scriptPath': (None, scriptPath), 'useDocker': (None, useDocker),
             'smFlg': (None, smFlg),
             'userName': (None, userName)}
+    res = requests.post(mgrapi_host + '/proxyApi/proxy/addNode', files=file).json()
+    print(f'========================》 第一步：启动节点：{res} 《========================')
 
-    res = requests.post(mgrapi_host + '/proxyApi/proxy/addNode', files=file)
-    return res
+    web3 = Web3(HTTPProvider(chain_rpc), chain_id=chain_id, multi_ledger=True, encryption_mode='SM')
+    res_msg = Node(web3).add(name=nodeName, owner=chain_address, desc=desc,
+                             pubkey=res['data']['publicKey'],
+                             bls_pubkey=res['data']['blsPubKey'],
+                             host_address=ip, rpc_port=rpcPort, p2p_port=p2pPort,
+                             private_key=privatekey)
+    print(f'========================》 第二步：把子节点加入主链中：{res_msg} 《========================')
+    return res_msg
+
+
+if __name__ == '__main__':
+    r = create_node(genesis_filename='genesis.json', genesis_filepath=r'C:\Users\juzix\Documents\genesis.json',
+                    license_filename='platone-license', license_filepath=r'C:\Users\juzix\Documents\platone-license',
+                    desc='no', nodeId='1', nodeIp='192.168.120.136', nodeName='node-98', p2pPort=11443,
+                    userName='juzix', password='123456', rpcPort=1443, scriptPath='~/linux/scripts', useDocker=2,
+                    smFlg=1, ip='192.168.120.136', chain_rpc='http://192.168.120.133:7789',
+                    chain_address='lax1sqhslzzw6gvff5awk3lk937hndkhdk6twke942',
+                    privatekey='da2b4214817a9d04a53206bc9d2cf93e76f4cd799d33bcb9022bbe6b7d2aa693')
+    print(r)

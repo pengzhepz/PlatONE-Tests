@@ -223,6 +223,9 @@ class BasePage:
         return self.find_Element(el).is_enabled()
 
     def check_text(self, text):
+        """
+        检查text是否存在
+        """
         from selenium.webdriver.common.by import By
         x = (By.XPATH, f'//*[text()="{text}"]')
         try:
@@ -234,6 +237,9 @@ class BasePage:
             return False
 
     def upload_file(self, loc, filepath):
+        """
+        windows操作系统下原生的上传文件
+        """
         import os
         try:
             self.click_Element(loc, mark='上传')
@@ -242,3 +248,9 @@ class BasePage:
             time.sleep(2)
         except:
             raise
+
+    def move_action(self, element):
+        # 移动view直到查找到元素
+        # x = (By.XPATH, '//*[text()="修改"]')
+        target = self.find_Element(element)
+        self.driver.execute_script("arguments[0].scrollIntoView();", target)

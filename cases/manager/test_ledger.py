@@ -1,5 +1,3 @@
-import time
-
 import pytest
 from lib.mgrui.locator.ledgerPage import LedgerPage
 import random
@@ -141,18 +139,7 @@ class TestLedger:
         ledger_page.delete_node(num=1)
         assert ledger_page.check_text('删除成功') is True
 
-    def test_14_recycle_author(self, ledger_page):
-        """
-        回收权限
-        """
-        try:
-            ledger_page.enter_ledger_detail()
-            ledger_page.re_authorize(index=1)
-            assert ledger_page.check_text('回收权限成功') is True
-        finally:
-            ledger_page.close_ledger_window()
-
-    def test_15_authorize_success(self, ledger_page):
+    def test_14_authorize_success(self, ledger_page):
         """
         授权用户
         """
@@ -163,7 +150,18 @@ class TestLedger:
         finally:
             ledger_page.close_ledger_window()
 
-    @pytest.mark.skip('有问题')
+    def test_15_recycle_author(self, ledger_page):
+        """
+        回收权限
+        """
+        try:
+            ledger_page.enter_ledger_detail()
+            ledger_page.re_authorize(index=1)
+            assert ledger_page.check_text('回收权限成功') is True
+        finally:
+            ledger_page.close_ledger_window()
+
+    @pytest.mark.skip('有bug')
     def test_16_no_author(self, no_author_login):
         """
         ：TODO： 跟test_recycle_author方法紧密关联，得解耦

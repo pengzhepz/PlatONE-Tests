@@ -19,7 +19,7 @@ drivers = {
 
 # 联盟后台登录账号(通用)
 chain_ip = '192.168.120.133'
-chain_port = '1331'
+chain_port = '7789'
 file = r'C:\Users\juzix\Downloads\chaincreater.json'  # 通用登录
 file_pwd = '12345678'
 

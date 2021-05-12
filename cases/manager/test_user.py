@@ -1,3 +1,5 @@
+import time
+
 import pytest
 from lib.mgrui.locator.userPage import UserPage
 
@@ -36,3 +38,11 @@ class TestUser:
         """
         user_page.delete_user(index=0)  # 删除第X个用户
         assert user_page.check_text('用户信息删除成功!') is True
+
+    def test_04_edit_user(self, user_page):
+        """
+        修改用户
+        """
+        user_page.edit_user()
+        user_page.choose_power('节点管理员')
+        assert user_page.check_text('更新用户信息成功!') is True
