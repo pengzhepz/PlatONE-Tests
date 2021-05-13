@@ -3,8 +3,9 @@ from dataclasses import dataclass
 from dacite import from_dict
 from ruamel import yaml
 
+from common.connectServer import connect_linux
 from lib.env.node import NodeGroup, Infos
-from lib.mgrapi import initChain
+from lib.mgrapi import initChain, createNode
 from setting import *
 
 
@@ -32,7 +33,8 @@ class Env(Infos):
         running_list = []
         for member in self.members:
             p_id = \
-            member.run_ssh("ps -ef|grep platon|grep port|grep %s|grep -v grep|awk {'print $2'}" % member.p2p_port)[0]
+                member.run_ssh("ps -ef|grep platon|grep port|grep %s|grep -v grep|awk {'print $2'}" % member.p2p_port)[
+                    0]
             if len(p_id) != 0:
                 running_dict = {'host': member.host, 'pid': p_id.strip()}
                 running_list.append(running_dict)
@@ -44,9 +46,10 @@ class Env(Infos):
     def deploy(self):
         for member in self.members:
             p_id = member.run_ssh(
-                "ps -ef|grep platon|grep port|grep %s|grep -v grep|awk {'print $2'}" % member.p2p_port)
+                "ps -ef|grep platone|grep port|grep %s|grep -v grep|awk {'print $2'}" % member.p2p_port)
             if len(p_id) != 0:
-                member.run_ssh("sudo kill -9 %s" % p_id[0].strip(), member.password)
+                print(p_id[0].strip())
+                member.run_ssh("sudo -S -p '' kill -9 {}".format(int(p_id[0].strip())), member.password)
                 logger.info("sotp node {} {}".format(member.host, member.p2p_port))
             path = deploy_path + "/node-" + str(member.p2p_port)
             member.run_ssh("sudo -S -p '' rm -rf {};mkdir -p {}".format(path, path), member.password)
@@ -56,25 +59,61 @@ class Env(Infos):
             member.run_ssh("cd {};tar -zxvf {}".format(path, "linux.tar.gz"))
             logger.info("decompression {} success".format("/node-" + str(member.p2p_port)))
 
-        result = initChain.init_chain('license_filename', license_filepath, "liuxing", self.members[0].host, 1,
+        initChain.init_chain('platone-license', PLATONE_LICENSE_FILE, "liuxing", self.members[0].host, 1,
                              self.members[0].host, 'liuxing', self.members[0].p2p_port, self.members[0].password,
                              self.members[0].rpc_port,
-                             scripts_path, 2, 1, 'test', 'lax17nqy9qdphfmz3fj598rq59zek4t7hzatju8mn6')
-        print(result)
+                             '~/platone_test/node-16789/linux/scripts', 2, 1, 'platon',
+                             'lax17nqy9qdphfmz3fj598rq59zek4t7hzatju8mn6')
+        env.upload_genesis()
+        for member in self.members[1:]:
+            scripts_path = deploy_path + "~/node-" + str(member.p2p_port) + "/linux/scripts_path/scripts"
+            createNode.create_node('genesis.json', GENESIS_FILE, 'platone-license',
+                                   PLATONE_LICENSE_FILE,
+                                   "服务器地址：" + member.host, member.host, 1, member.host, "节点：" + member.host,
+                                   member.p2p_port,
+                                   member.username, member.password, member.rpc_port, scripts_path, 2, 1)
+
+    def upload_genesis(self):
+        if not os.path.exists(TMP_GENESIS):
+            os.makedirs(TMP_GENESIS)
+        if os.path.exists(TMP_GENESIS + "\genesis.json"):
+            os.remove(TMP_GENESIS + "\genesis.json")
+        ssh, sftp, t = connect_linux(self.members[0].host, self.members[0].username, self.members[0].password,
+                                     self.members[0].ssh_port)
+        conf_path = deploy_path + "/node-" + str(self.members[0].p2p_port) + "/linux/conf/"
+
+        sftp.get(f'{conf_path}/genesis.json', r"{}\genesis.json".format(TMP_GENESIS))
+
+        # for member in self.members[1:]:
+        #     ssh, sftp, t = connect_linux(member.host, member.username, member.password, member.ssh_port)
+        #     remote_genesis = deploy_path + "/node-" + str(member.p2p_port) + "/linux/conf/genesis.json"
+        #     sftp.put(TMP_GENESIS, remote_genesis)
 
     def start(self):
-        print(license_filepath)
+        for member in self.members[1:]:
+            scripts_path = deploy_path + "~/node-" + str(member.p2p_port) + "/linux/scripts_path/scripts"
+            # createNode.create_node('genesis.json', GENESIS_FILE, 'platone-license',
+            #                        PLATONE_LICENSE_FILE,
+            #                        "服务器地址：" + member.host, member.host, 1, member.host, "节点：" + member.host,
+            #                        member.p2p_port,
+            #                        member.username, member.password, member.rpc_port, scripts_path, 2, 1)
+            print('genesis.json', GENESIS_FILE, 'platone-license',
+                  PLATONE_LICENSE_FILE,
+                  "服务器地址：" + member.host, member.host, 1, member.host, "节点：" + member.host,
+                  member.p2p_port,
+                  member.username, member.password, member.rpc_port, scripts_path, 2, 1)
 
     def all_stop(self):
         for member in self.members:
             p_id = member.run_ssh(
                 "ps -ef|grep platon|grep port|grep %s|grep -v grep|awk {'print $2'}" % member.p2p_port)
             if len(p_id) != 0:
-                member.run_ssh("sudo kill -9 %s" % p_id[0].strip(), member.password)
+                print("sudo kill -9 {}".format(int(p_id[0].strip())))
+                member.run_ssh("sudo kill -9 {}".format(int(p_id[0].strip())), member.password)
                 logger.info("sotp node {} {}".format(member.host, member.p2p_port))
 
-    def restart(self):
-        pass
+    # def restart():
+    #     pass
 
     def clean(self):
         env.all_stop()
@@ -97,5 +136,7 @@ if __name__ == '__main__':
     # print(env.running())
     # env.all_stop()
     # env.clean()
-    env.deploy()
-    # env.start()
+    # env.deploy()
+    # env.upload_genesis()
+    env.start()
+    # env.upload_genesis()

@@ -1,6 +1,6 @@
 import os
 
-from conf.settings import BASE_DIR
+from setting import BASE_DIR
 
 
 def abspath(path):
@@ -15,3 +15,4 @@ def abspath(path):
         return path
     path = path.lstrip("./")
     return os.path.abspath(BASE_DIR + "/" + path)
+

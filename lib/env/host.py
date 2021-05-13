@@ -1,5 +1,8 @@
 from dataclasses import dataclass
 
+import paramiko
+from paramiko import SSHException
+
 from common.connectServer import connect_linux
 
 
@@ -25,3 +28,18 @@ class Host:
         pwd_list = self.run_ssh("pwd")
         pwd = pwd_list[0].strip("\r\n")
         return pwd
+
+    def root_run_ssh(self, cmd, inputs):
+        """ 执行远程shell命令，支持多次输入unhashable type: 'list'
+        """
+        stdin, stdout, stderr = self.ssh.exec_command(cmd)
+        print(inputs)
+        if inputs:
+            for input in inputs:
+                print(input)
+                stdin.write(input + '\n')
+        errs = stderr.readlines()
+        if errs:
+            raise SSHException({errs})
+        outs = stdout.readlines()
+        return outs
