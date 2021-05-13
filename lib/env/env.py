@@ -67,11 +67,12 @@ class Env(Infos):
         env.upload_genesis()
         for member in self.members[1:]:
             scripts_path = deploy_path + "~/node-" + str(member.p2p_port) + "/linux/scripts_path/scripts"
-            createNode.create_node('genesis.json', GENESIS_FILE, 'platone-license',
-                                   PLATONE_LICENSE_FILE,
-                                   "服务器地址：" + member.host, member.host, 1, member.host, "节点：" + member.host,
-                                   member.p2p_port,
-                                   member.username, member.password, member.rpc_port, scripts_path, 2, 1)
+            createNode.create_node(genesis_filename='genesis.json', genesis_filepath=GENESIS_FILE,
+                                   license_filename='platone-license', license_filepath=PLATONE_LICENSE_FILE,
+                                   ip=member.host, nodeIp=member.host, nodeName="节点2：" + member.host,
+                                   p2pPort=member.p2p_port, password=member.password, rpcPort=member.rpc_port,
+                                   scriptPath=scripts_path, userName=member.username,
+                                   chain_rpc='', chain_address='', privatekey='')  # TODO： 待补充
 
     def upload_genesis(self):
         if not os.path.exists(TMP_GENESIS):
