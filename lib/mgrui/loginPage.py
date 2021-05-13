@@ -104,8 +104,8 @@ class LoginPage(BasePage):
         2.创建用户
         """
         self.click_Element(self.set_chain_btn, mark='配置链')
+        time.sleep(0.5)
         self.click_Element(self.create_chain_btn, mark='创建链')
-
         self.input_Text(self.new_wallet_pwd, pwd, mark='输入第一次密码')
         self.input_Text(self.new_wallet_confirm_pwd, confirm_pwd, mark='输入二次密码')
         time.sleep(1)

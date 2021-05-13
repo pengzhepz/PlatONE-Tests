@@ -2,7 +2,7 @@ from lib.mgrui.urls import ledger_url
 import pytest
 from selenium import webdriver
 from selenium.webdriver.remote.webelement import WebElement
-from lib.mgrui.locator.loginPage import LoginPage
+from lib.mgrui.loginPage import LoginPage
 from setting import DRIVER, GLOBAL_TIMEOUT
 import time
 

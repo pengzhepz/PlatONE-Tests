@@ -1,7 +1,6 @@
 import pytest
 from lib.mgrui.urls import ledger_url
 from lib.mgrui.locator.loginPage import LoginPage
-from common.getYaml import get_data
 import os
 import time
 
@@ -17,8 +16,7 @@ class TestLogin:
     """
     测试登录页面
     """
-
-    # cases, parameters = get_data(r'../../data/ui/login.yaml')  # 5条用例，各种身份登录
+    user_path = os.path.abspath(os.path.join(os.getcwd(), "../../files/"))
 
     @pytest.mark.skip('不能重复创建同样数据的链')
     def test_01_create_chain(self, login_page):
@@ -44,26 +42,23 @@ class TestLogin:
             # print(result)
             """
 
-    # @pytest.mark.parametrize('params,expected', parameters, ids=cases)
-    @pytest.mark.skip()
-    @pytest.mark.parametrize("user,pwd,auth,ip,port", [
-        ('', 12345678, True, '192.168.120.133', '7789'),
-        ('', 12345678, True, '192.168.120.133', '7789'),
-        ('', 12345678, True, '192.168.120.133', '7789'),
-        ('', 12345678, True, '192.168.120.133', '7789'),
-        ('', 12345678, True, '192.168.120.133', '7789'),
-        ('', 12345678, True, '192.168.120.133', '7789')
+    @pytest.mark.parametrize("user,pwd,auth,ip,port,expect", [
+        (user_path + '\\chaincreater.json', 12345678, True, '192.168.120.133', '7789', '链创建者'),
+        (user_path + '\\chainmanager.json', 12345678, True, '192.168.120.133', '7789', '链管理员'),
+        (user_path + '\\nodemanager.json', 12345678, True, '192.168.120.133', '7789', '节点管理员'),
+        (user_path + '\\contractmanager.json', 12345678, True, '192.168.120.133', '7789', '合约管理员'),
+        (user_path + '\\nodepublicter.json', 12345678, True, '192.168.120.133', '7789', '合约部署员'),
+        (user_path + '\\visitor.json', 12345678, True, '192.168.120.133', '7789', '游客')
     ])
-    def test_02_login_success(self, login_page, user, pwd, auth, ip, port):
+    def test_02_login_success(self, login_page, user, pwd, auth, ip, port, expect):
         """
         不同角色之间的登录
         """
         login_page.set_chain(ip, port)
         login_page.login(user, pwd)
         time.sleep(2)
-        # assert expected['id'] == login_page.get_user_id()  # 判断首页身份
+        assert expect == login_page.get_user_id()  # 判断首页身份
 
-    @pytest.mark.skip()
     def test_03_create_wallet_success(self, login_page):
         """
         创建钱包

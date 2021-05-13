@@ -9,7 +9,7 @@ def node_page(login):
 
 class TestNode:
 
-    # @pytest.mark.skip('节点信息已配置')
+    @pytest.mark.skip('节点信息已配置')
     @pytest.mark.parametrize('name, desc, rpc, license_file, ip,pwd, host, p2pport, genesis_file, script, user', [(
             'node10',
             'node_desc',
@@ -67,7 +67,7 @@ class TestNode:
         node_page.edit_normalnd_port('1350', '11350')
         assert node_page.check_text('操作成功!') is True
 
-    @pytest.mark.skip('跳过,数据受限')
+    @pytest.mark.skip('跳过,2/3受限')
     def test_05_normalnd_publicnd(self, node_page):
         """
         修改观察者节点为共识节点
@@ -76,7 +76,7 @@ class TestNode:
         node_page.to_publicnd()
         # assert node_page.check_text('操作成功!') is True
 
-    @pytest.mark.skip('跳过,数据受限')
+    @pytest.mark.skip('跳过,2/3数据受限')
     def test_06_publicnd_normal(self, node_page):
         """
         1.仅有2个共识节点
