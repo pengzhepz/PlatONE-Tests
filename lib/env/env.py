@@ -72,7 +72,9 @@ class Env(Infos):
                                    ip=member.host, nodeIp=member.host, nodeName="节点：" + member.host,
                                    p2pPort=member.p2p_port, password=member.password, rpcPort=member.rpc_port,
                                    scriptPath=scripts_path, userName=member.username,
-                                   chain_rpc='http://'+self.members[0].host+':'+str(self.members[0].rpc_port), chain_address='lax17sfqr79fzq6qgx3x9wv8259mjjjstjfhjyue4p', privatekey='dfe074dc29a259f23c4dbca369faee16a82528af2324ef230811db89a704e8b6')
+                                   chain_rpc='http://'+self.members[0].host+':'+str(self.members[0].rpc_port),
+                                   chain_address='lax17sfqr79fzq6qgx3x9wv8259mjjjstjfhjyue4p',
+                                   privatekey='dfe074dc29a259f23c4dbca369faee16a82528af2324ef230811db89a704e8b6')
 
     def upload_genesis(self):
         if not os.path.exists(TMP_GENESIS):

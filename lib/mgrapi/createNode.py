@@ -43,12 +43,8 @@ def create_node(genesis_filename, genesis_filepath, license_filename, license_fi
             'scriptPath': (None, scriptPath), 'useDocker': (None, useDocker),
             'smFlg': (None, smFlg),
             'userName': (None, userName)}
-    try:
-        res = requests.post(mgrapi_host + '/proxyApi/proxy/addNode', files=file).json()
-        if res['data']['publicKey'] and res['data']['blsPubKey']:
-            raise
-    except:
-        print('第一步：启动节点失败！！！')
+
+    res = requests.post(mgrapi_host + '/proxyApi/proxy/addNode', files=file).json()
 
     print(f'========================》 第二步：把子节点加入主链中《========================')
     web3 = Web3(HTTPProvider(chain_rpc), chain_id=chain_id, multi_ledger=True, encryption_mode='SM')
@@ -56,7 +52,7 @@ def create_node(genesis_filename, genesis_filepath, license_filename, license_fi
                              pubkey=res['data']['publicKey'],
                              bls_pubkey=res['data']['blsPubKey'],
                              host_address=ip, rpc_port=rpcPort, p2p_port=p2pPort,
-                             private_key=privatekey)
+                             private_key=privatekey,tx_cfg={})
     return res_msg
 
 
