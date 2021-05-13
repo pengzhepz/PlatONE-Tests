@@ -63,16 +63,16 @@ class Env(Infos):
                              self.members[0].host, 'liuxing', self.members[0].p2p_port, self.members[0].password,
                              self.members[0].rpc_port,
                              '~/platone_test/node-16789/linux/scripts', 2, 1, 'platon',
-                             'lax17nqy9qdphfmz3fj598rq59zek4t7hzatju8mn6')
+                             'lax17sfqr79fzq6qgx3x9wv8259mjjjstjfhjyue4p')
         env.upload_genesis()
         for member in self.members[1:]:
-            scripts_path = deploy_path + "~/node-" + str(member.p2p_port) + "/linux/scripts_path/scripts"
+            scripts_path = "~/" + deploy_path + "/node-" + str(member.p2p_port) + "/linux/scripts"
             createNode.create_node(genesis_filename='genesis.json', genesis_filepath=GENESIS_FILE,
                                    license_filename='platone-license', license_filepath=PLATONE_LICENSE_FILE,
-                                   ip=member.host, nodeIp=member.host, nodeName="节点2：" + member.host,
+                                   ip=member.host, nodeIp=member.host, nodeName="节点：" + member.host,
                                    p2pPort=member.p2p_port, password=member.password, rpcPort=member.rpc_port,
                                    scriptPath=scripts_path, userName=member.username,
-                                   chain_rpc='', chain_address='', privatekey='')  # TODO： 待补充
+                                   chain_rpc='http://'+self.members[0].host+':'+str(self.members[0].rpc_port), chain_address='lax17sfqr79fzq6qgx3x9wv8259mjjjstjfhjyue4p', privatekey='dfe074dc29a259f23c4dbca369faee16a82528af2324ef230811db89a704e8b6')
 
     def upload_genesis(self):
         if not os.path.exists(TMP_GENESIS):
@@ -137,7 +137,7 @@ if __name__ == '__main__':
     # print(env.running())
     # env.all_stop()
     # env.clean()
-    # env.deploy()
+    env.deploy()
     # env.upload_genesis()
-    env.start()
+    # env.start()
     # env.upload_genesis()
