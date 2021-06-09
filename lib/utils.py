@@ -1,6 +1,3 @@
-
-
-
 def assert_code(result, code):
     '''
     assert the ErrorCode

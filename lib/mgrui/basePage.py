@@ -243,7 +243,7 @@ class BasePage:
         import os
         try:
             self.click_Element(loc, mark='上传')
-            path = os.path.abspath('..') + '\\uploadjson.exe'  # 上传文件
+            path = os.path.abspath('') + '\\uploadjson.exe'  # 上传文件
             os.system(fr'{path} {filepath}')
             time.sleep(2)
         except:
