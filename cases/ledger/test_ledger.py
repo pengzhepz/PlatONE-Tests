@@ -10,7 +10,7 @@ from cases.ledger.conftest import *
 class TestNode:
 
 
-    def test_list(self, create_ledger_jion_observe_node):
+    def test_listAll(self, create_ledger_jion_observe_node):
         """
         @describe: 查询指定子帐本所有节点信息
         @parameters:
@@ -18,7 +18,7 @@ class TestNode:
         @return:
         - 1. 子帐本所有节点信息，list
         """
-        ledger_name, sub_ledger_node = create_ledger_jion_observe_node
+        ledger_name, sub_ledger_node, _ = create_ledger_jion_observe_node
         subledger_node_list = sub_ledger_node.list()
         assert isinstance(subledger_node_list, list)
         assert json.loads(subledger_node_list[0])['code'] == 0
@@ -41,7 +41,6 @@ class TestNode:
 
     def test_grantPerm(self, create_ledger):
         """
-        todo:授权之后可以去哪里验证确实授权了呢
         @describe:
         @parameters:
         - 1. address： node_id
@@ -50,14 +49,14 @@ class TestNode:
         @return:
         - 1.
         """
-        ledger_name, sub_ledger_node = create_ledger
+        ledger_name, sub_ledger_node, _ = create_ledger
+        time.sleep(3)
         grantperm_result = sub_ledger_node.grantPerm(chain_admin_address, main_private_key)
         assert_code(grantperm_result, 0)
 
 
     def test_revokePerm(self, create_ledger):
         """
-        todo:回收授权之后可以去哪里验证确实回收授权了呢
         @describe:
         @parameters:
         - 1. address： node_id
@@ -66,13 +65,20 @@ class TestNode:
         @return:
         - 1.
         """
-        ledger_name, sub_ledger_node = create_ledger
+        ledger_name, sub_ledger_node, _ = create_ledger
         time.sleep(5)
         result = sub_ledger_node.revokePerm(chain_admin_address, main_private_key)
-        print(result)
+        # 底层没有做限制没有授权的不能回收授权。前端说会做验证但是待验
+        assert_code(result, 0)
+
+        grantperm_result = sub_ledger_node.grantPerm(chain_admin_address, main_private_key)
+        assert_code(grantperm_result, 0)
+        time.sleep(2)
+        result = sub_ledger_node.revokePerm(chain_admin_address, main_private_key)
+        assert_code(result, 0)
 
 
-    def test_remove(self, create_ledger_jion_observe_node):
+    def test_remove(self, create_ledger_jion_observe_node, clients):
         """
         @describe: 节点退出子帐本
         @parameters:
@@ -82,12 +88,13 @@ class TestNode:
         @return:
         - 1. dict
         """
-        ledger_name, sub_ledger_node = create_ledger_jion_observe_node
-        result = sub_ledger_node.remove(another_node_id, main_private_key)
+        ledger_name, sub_ledger_node, client = create_ledger_jion_observe_node
+        observe_client_another = clients[4]
+        result = sub_ledger_node.remove(observe_client_another.node_id, main_private_key)
         assert_code(result, 0)
 
 
-    def test_updateNodeType_obs_to_con(self, create_ledger_jion_observe_node):
+    def test_updateNodeType_obs_to_con(self, create_ledger_jion_observe_node, clients):
         """
         @describe:
         @parameters: 更改子帐本节点类型, 观察者节点修改未共识节点
@@ -98,17 +105,17 @@ class TestNode:
         @return: dict
         - 1.
         """
-        ledger_name, sub_ledger_node = create_ledger_jion_observe_node
+        ledger_name, sub_ledger_node, client = create_ledger_jion_observe_node
+        observe_client_another = clients[4]
         node_id = json.loads(sub_ledger_node.list()[0])['data']['observer'][0]['nodeID']
-        assert node_id == another_node_id121
-        result = sub_ledger_node.updateNodeType(another_node_id121, 1, main_private_key)
+        assert node_id == observe_client_another.node_id
+        result = sub_ledger_node.updateNodeType(observe_client_another.node_id, 1, main_private_key)
         assert_code(result, 0)
         consensus_node_list = [json.loads(sub_ledger_node.list()[0])['data']['consensus'][i]['nodeID'] for i in range(len(json.loads(sub_ledger_node.list()[0])['data']['consensus']))]
-        print(consensus_node_list)
-        assert another_node_id121 in consensus_node_list
+        assert observe_client_another.node_id in consensus_node_list
 
 
-    def test_updateNodeType_con_to_obs(self, create_ledger_four_node):
+    def test_updateNodeType_con_to_obs(self, create_ledger_four_node, clients):
         """
         @describe:
         @parameters: 更改子帐本节点类型, 修改共识节点为观察者节点,修改后共识节点数量大于节点列表数量的2/3
@@ -119,22 +126,23 @@ class TestNode:
         @return: dict
         - 1.
         """
-        ledger_name, sub_ledger_node = create_ledger_four_node
+        ledger_name, sub_ledger_node, client = create_ledger_four_node
+        client_another = clients[4]
         time.sleep(10)
         obs_nodeid = json.loads(sub_ledger_node.list()[0])['data']['observer']
         assert obs_nodeid == []
-        result = sub_ledger_node.updateNodeType(another_node_id121, 2, main_private_key)
+        result = sub_ledger_node.updateNodeType(client_another.node_id, 2, main_private_key)
         assert_code(result, 0)
         time.sleep(10)
         sub_ledger_list = sub_ledger_node.list()
         update_obs_nodeid = json.loads(sub_ledger_list[0])['data']['observer'][0]['nodeID']
-        assert update_obs_nodeid == another_node_id121
+        assert update_obs_nodeid == client_another.node_id
 
 
 
 class TestLedger:
 
-    def test_getAllLedgers(self):
+    def test_getAllLedgers(self, client):
         """
         @describe: 查询所有账本信息
         @parameters:
@@ -142,13 +150,12 @@ class TestLedger:
         @return:
         - 1. 所有账本信息，list
         """
-        ledgers = ledger.getAllLedgers()
-        # assert isinstance(ledger, list)
-        print(ledgers)
+        ledgers = client.ledger.getAllLedgers()
+        assert json.loads(ledgers[0])['code'] == 0
 
 
 
-    def test_createLedger(self):
+    def test_createLedger(self, client):
         """
         @describe: 创建一个新账本
         @parameters:
@@ -162,9 +169,9 @@ class TestLedger:
         @return:
         - 1. 指定块中特定账户地址的余额,int
         """
+        platone = client.platone
         nonce = platone.getTransactionCount(main_address, ledger=sys_ledger)
-        print(nonce)
-        id = root_node_id
+        id = client.node_id
         ledger_name = "test" + str(nonce)
         ledger_json = {
             "LedgerName": ledger_name,
@@ -175,18 +182,18 @@ class TestLedger:
                 }
             ]
         }
-        result = ledger.createLedger(ledger_json, main_private_key)
+        result = client.ledger.createLedger(ledger_json, main_private_key)
         assert_code(result, 0)
-        len_list = len(json.loads(ledger.getAllLedgers()[0])['data'])
+        len_list = len(json.loads(client.ledger.getAllLedgers()[0])['data'])
         for i in range(len_list):
-            if ledger_name == json.loads(ledger.getAllLedgers()[0])['data'][i]['ledgerName']:
-                assert json.loads(ledger.getAllLedgers()[0])['data'][i]['consensusNodes'][0]['blsPubKey'] == root_node_bls_pubkey
+            if ledger_name == json.loads(client.ledger.getAllLedgers()[0])['data'][i]['ledgerName']:
+                assert json.loads(client.ledger.getAllLedgers()[0])['data'][i]['consensusNodes'][0]['blsPubKey'] == client.node_pubkey
                 break
         else:
             assert 1 == 2, 'Failed to create ledger'
 
 
-    def test_joinLedger(self, create_ledger):
+    def test_joinLedger(self, create_ledger, clients):
         """
         @describe:
         @parameters:
@@ -198,53 +205,52 @@ class TestLedger:
         @return:
         - 1.
         """
-        ledger_name, sub_ledger_node = create_ledger
-        join_result = ledger.joinLedger(ledger_name, another_node_id, another_node_bls_pubkey, main_private_key)
+        ledger_name, sub_ledger_node, client = create_ledger
+        client_another = clients[4]
+        join_result = client.ledger.joinLedger(ledger_name, client_another.node_id, client_another.node_pubkey, main_private_key)
         assert_code(join_result, 0)
         time.sleep(5)
-        # node = ledger_node.LedgerNode(w3, ledger_name)
-        # node.is_wait_receipt = True
-        add_result = sub_ledger_node.add(another_node_id, another_node_bls_pubkey, main_private_key)
+        add_result = sub_ledger_node.add(client_another.node_id, client_another.node_pubkey, main_private_key)
         assert_code(add_result, 0)
-        print(add_result)
 
 
     def test_joinLedgers(self, create_ledger):
         """
         @describe: 查询节点加入的账本名称列表
         @parameters:
-        - 1. node_id：
-        - 2. tx_cfg：
+        - 1. node_id： 节点ID
+        - 2. tx_cfg：可不填
         @return:账本名字列表
-        - 1.
-        # """
-        result = ledger.joinedLedgers(root_node_id)
+        - 1.节点加入的账本名称列表
+        """
+        ledger_name, sub_ledger_node, client = create_ledger
+        result = client.ledger.joinLedgers(client.node_id)
         assert isinstance(result, list) and json.loads(result[0])['code'] == 0
 
 
 
-    def test_quitLedger(self, create_ledger_jion_observe_node):
+    def test_quitLedger(self, create_ledger_jion_observe_node, clients):
         """
-        @describe:
+        @describe: 退出子帐本
         @parameters:
-        - 1. ledger_name：
-        - 2. node_id：
-        - 3. private_key：
-        - 4. tx_cfg：
+        - 1. ledger_name：子帐本名称
+        - 2. node_id：节点ID
+        - 3. private_key：签名私钥
+        - 4. tx_cfg：可不填
         @return:
-        - 1.
+        - 1. 返回结果
         """
-        ledger_name, sub_ledger_node = create_ledger_jion_observe_node
-        result = ledger.quitLedger(ledger_name, another_node_id121, main_private_key)
+        ledger_name, sub_ledger_node, client = create_ledger_jion_observe_node
+        client_another = clients[4]
+        result = client.ledger.quitLedger(ledger_name, client_another.node_id, main_private_key)
         assert_code(result, 0)
-        result = sub_ledger_node.remove(another_node_id121, main_private_key)
+        result = sub_ledger_node.remove(client_another.node_id, main_private_key)
         assert_code(result, 0)
 
 
 
 
     def test_terminateLedger(self, create_ledger_jion_observe_node):
-    # def test_terminateLedger(self):
         """
         @describe: 关闭账本所有记账节点都将退出账本
         @parameters:
@@ -254,8 +260,8 @@ class TestLedger:
         @return: 交易信息，dict
         - 1.
         """
-        ledger_name, _ = create_ledger_jion_observe_node
-        result = ledger.terminateLedger(ledger_name, main_private_key)
+        ledger_name, _, client = create_ledger_jion_observe_node
+        result = client.ledger.terminateLedger(ledger_name, main_private_key)
         assert_code(result, 0)
 
 

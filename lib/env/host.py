@@ -43,3 +43,7 @@ class Host:
             raise SSHException({errs})
         outs = stdout.readlines()
         return outs
+
+if __name__ == '__main__':
+    host = Host()
+    print(host)

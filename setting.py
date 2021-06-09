@@ -32,3 +32,18 @@ GENESIS_FILE = os.path.join(BASE_DIR, r"files\tmp\genesis.json")
 # mgrapi_host
 mgrapi_host = 'http://10.10.8.184'
 
+CHAIN_ID= 200
+hrp = 'lax'
+sys_ledger = 'sys'
+
+#nodes_file
+NODES_FILE = os.path.join(BASE_DIR, r'lib/env/nodes_template.yml')
+
+NIDE_INFO_FILE = os.path.join(BASE_DIR, r'lib/env/node_info.yml')
+
+ADDRESS_FILE = os.path.join(BASE_DIR, r'lib/env/user_address.yml')
+
+visitor_wallet_file = os.path.join(BASE_DIR, r'lib\env\wallet.json')
+
+linux_put_keystore = r'/home/juzix/platone_test/node-17789/linux/data/node-1/keystore'
+wallet_file = 'wallet.json'

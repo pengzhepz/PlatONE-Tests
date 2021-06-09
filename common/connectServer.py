@@ -1,5 +1,8 @@
 import paramiko
 from loguru import logger
+from platone import Web3, HTTPProvider, WebsocketProvider
+from platone.middleware import geth_poa_middleware
+from platone.utils.threads import Timeout
 
 
 def connect_linux(ip, username, password, port=22):
@@ -52,3 +55,30 @@ def run_ssh_cmd(ssh, cmd, password=None, password2=None, password3=None):
     except Exception as e:
         raise e
     return stdout_list
+
+
+def connect_web3(url, chain_id):
+    """
+    Connect to the web3 service, add block query middleware,
+     use to implement platon_getBlockByHash, platon_getBlockByNumber, etc.
+    :param url:
+    :param chain_id:
+    :return:
+    """
+    if "ws" in url:
+        w3 = Web3(WebsocketProvider(url), chain_id=chain_id, multi_ledger=True, encryption_mode='SM')
+    else:
+        w3 = Web3(HTTPProvider(url), chain_id=chain_id, multi_ledger=True, encryption_mode='SM')
+    # w3.middleware_stack.inject(geth_poa_middleware, layer=0)
+
+    return w3
+
+
+def wait_connect_web3(url, chain_id=200, timeout=20, poll_latency=0.2):
+    with Timeout(timeout) as _timeout:
+        while True:
+            web3 = connect_web3(url, chain_id)
+            if web3.isConnected():
+                break
+            _timeout.sleep(poll_latency)
+    return web3

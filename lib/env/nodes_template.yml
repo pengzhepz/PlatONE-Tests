@@ -1,19 +1,19 @@
-username: platon
-password: Platon123!
+username: juzix
+password: '123456'
 ssh_port: 22
 init:
-  p2p_port: 16789
-  rpc_port: 6789
+  p2p_port: 17789
+  rpc_port: 7789
   members:
-  - host: 192.168.10.221
-  - host: 192.168.10.222
-  - host: 192.168.10.223
-  - host: 192.168.10.224
+  - host: 192.168.16.121
+  - host: 192.168.16.122
+  - host: 192.168.16.123
+  - host: 192.168.16.124
 normal:
-  p2p_port: 16790
-  rpc_port: 6790
+  p2p_port: 17790
+  rpc_port: 7790
   members:
-  - host: 192.168.10.221
-  - host: 192.168.10.222
-  - host: 192.168.10.223
-  - host: 192.168.10.224
+  - host: 192.168.16.121
+  - host: 192.168.16.122
+  - host: 192.168.16.123
+  - host: 192.168.16.124

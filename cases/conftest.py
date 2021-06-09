@@ -1,14 +1,14 @@
 import pytest
 from loguru import logger
-from setting import LOG_DIR, LOG_SIZE
+# from setting import LOG_DIR, LOG_SIZE
 
 
-@pytest.fixture(scope='session', autouse=False)
-def global_evn(request):
-    logger.add(LOG_DIR, rotation=LOG_SIZE)
-    logger.info('>> Test start! >>>>>>>>>>>>>>')
-    evn = None  # todo：部署环境
-    return evn
+# @pytest.fixture(scope='session', autouse=False)
+# def global_evn(request):
+#     logger.add(LOG_DIR, rotation=LOG_SIZE)
+#     logger.info('>> Test start! >>>>>>>>>>>>>>')
+#     evn = None  # todo：部署环境
+#     return evn
 
 
 @pytest.fixture(scope='session', autouse=False)
