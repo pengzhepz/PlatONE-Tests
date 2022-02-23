@@ -2,7 +2,7 @@ import math
 import time, json
 import pytest
 from hexbytes import HexBytes
-from platone import  Account, ledger_node
+from platone import  Account, ledger_node, personal
 from platone.platone import Platone
 
 from lib.utils import *
@@ -22,7 +22,7 @@ contract_deployer_address, contract_deployer_private_key = file_data["contract_d
 visitor_address, visitor_private_key = file_data["visitor_address"], file_data["visitor_private_key"]
 
 
-@pytest.fixture(scope="session", autouse=False)
+@pytest.fixture(scope="class", autouse=False)
 def global_test_env():
     logger.info("start global_test_env>>>>>>>>>>>>>>")
     test_env = env_factory(NODES_FILE)
@@ -39,15 +39,15 @@ def global_test_env():
 
 
 
-@pytest.fixture(scope="session", autouse=False)
-def global_test_env():
-    logger.info("start global_test_env>>>>>>>>>>>>>>")
-    test_env = env_factory(NODES_FILE)
-
-    test_env.get_node_file()
-    test_env.parse_client()
-
-    yield test_env
+# @pytest.fixture(scope="session", autouse=False)
+# def global_test_env():
+#     logger.info("start global_test_env>>>>>>>>>>>>>>")
+#     test_env = env_factory(NODES_FILE)
+#
+#     test_env.get_node_file()
+#     test_env.parse_client()
+#
+#     yield test_env
 
 
 

@@ -23,6 +23,7 @@ def init_chain(license_filename, license_filepath, desc, ip, nodeId, nodeIp, nod
     :param creatorAddress: 链创建者地址
     :return:
     """
+    print(desc)
     file = {'platoneLicense': (license_filename, open(license_filepath, 'rb'), 'application/octet-stream'),
             'desc': (None, desc), 'ip': (None, ip),
             'nodeId': (None, nodeId), 'nodeIp': (None, nodeIp), 'nodeName': (None, nodeName),

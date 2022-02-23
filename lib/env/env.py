@@ -250,6 +250,7 @@ class Env(Infos):
                 p_id = member.run_ssh(
                     "ps -ef|grep platon|grep port|grep %s|grep -v grep|awk {'print $2'}" % member.p2p_port)
                 assert isinstance(p_id, list)
+                logger.info("start node {} {}".format(member.host, member.p2p_port))
 
 
 

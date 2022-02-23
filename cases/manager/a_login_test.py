@@ -1,6 +1,6 @@
 import pytest
 from lib.mgrui.urls import ledger_url
-from lib.mgrui.locator.loginPage import LoginPage
+from lib.mgrui.loginPage import LoginPage
 import os
 import time
 

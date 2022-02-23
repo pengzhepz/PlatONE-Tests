@@ -778,6 +778,7 @@ class TestPersonal():
         - 1. address_list: 钱包地址列表
         """
         accounts_list = client.personal.listAccounts
+        print(accounts_list)
         assert isinstance(accounts_list, list)
 
 
@@ -912,6 +913,10 @@ class TestPersonal():
             "chainId": hex(client.chain_id),
             "value": hex(1 * 10 ** 18),
         }
+        try:
+            client.personal.importRawKey(main_private_key, "12345678")
+        except:
+            pass
         client.personal.unlockAccount(main_address, '123456')
         result = client.personal.signTransaction('transaction_dict', '12345678', ledger=sys_ledger)
         assert result['raw'][:2] == '0x'
@@ -969,9 +974,8 @@ class TestPersonal():
         assert result is None
 
 
-
+@pytest.mark.skip(reason='环境重置有，不重复测')
 class TestUser():
-
 
     def test_add_chain_admin(self, client):
         address = chain_admin_address
@@ -1048,7 +1052,9 @@ class TestParam():
 
 
     def test_updateBlockGasLimit(self, client):
-        client.param.updateBlockGasLimit()
+        # 多账本功能不涉及，此版本不测
+        pass
+        # client.param.updateBlockGasLimit()
 
 
     def test_updateIsProduceEmptyBlock(self,client):
@@ -1064,7 +1070,7 @@ class TestParam():
         print(result)
         time.sleep(3)
         balance = client.platone.getBalance(main_address, ledger=sys_ledger)
-        result_tr = transfer(main_private_key, user_address, 1, sys_ledger)
+        result_tr = transfer(main_private_key, user_address, 1, sys_ledger, client)
         print(result_tr)
         time.sleep(3)
         balance_after = client.platone.getBalance(main_address, ledger=sys_ledger)
@@ -1074,7 +1080,7 @@ class TestParam():
         print(result_true)
         time.sleep(3)
         balance_true_befor = client.platone.getBalance(main_address, ledger=sys_ledger)
-        result_tr1 = transfer(main_private_key, user_address, 1, sys_ledger)
+        result_tr1 = transfer(main_private_key, user_address, 1, sys_ledger, client)
         print(result_tr1)
         time.sleep(3)
         balance_true_after = client.platone.getBalance(main_address, ledger=sys_ledger)
@@ -1087,7 +1093,8 @@ class TestParam():
         print(update_result)
 
     def test_updateSystemParameter(self, client):
-        update_result = client.param.updateSystemParameter()
-
+        # 与多账本无关，此版本不测
+        # update_result = client.param.updateSystemParameter()
+        pass
 
 

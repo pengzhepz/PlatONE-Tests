@@ -44,8 +44,9 @@ class TestInformationStorage():
         time.sleep(5)
         prepare = client.platone.getPrepareQC(transaction_blocknumber, ledger_name_list[0])
         prepare1 = client.platone.getPrepareQC(transaction_blocknumber, ledger_name_list[1])
-        assert HexBytes(prepare['blockHash']) == transaction_blockhash != HexBytes(prepare1['blockHash'])
+        assert HexBytes(prepare['blockHash']) == transaction_blockhash
         assert prepare['blockNumber'] == transaction_blocknumber
+        assert prepare1 is None
 
         transaction_info = client.platone.getTransaction(transaction_hash.hex(), ledger_name_list[0])
         transaction_info1 = client.platone.getTransaction(transaction_hash.hex(), ledger_name_list[1])

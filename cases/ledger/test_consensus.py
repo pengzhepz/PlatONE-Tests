@@ -162,10 +162,10 @@ class TestNodeAbnormal():
                 sys_consensus_client, client_another = clients[i], clients[i + 1]
         time.sleep(20)
         ledger_name, sub_ledger_node = create_oneledger(client_another)
-        join_result = client.ledger.joinLedger(ledger_name, client.node_id, client.node_pubkey, main_private_key)
+        join_result = client.ledger.joinLedger(ledger_name, sys_consensus_client.node_id, sys_consensus_client.node_pubkey, main_private_key)
         assert_code(join_result, 0)
         time.sleep(3)
-        add_result = sub_ledger_node.add(client.node_id, client.node_pubkey, main_private_key)
+        add_result = sub_ledger_node.add(sys_consensus_client.node_id, sys_consensus_client.node_pubkey, main_private_key)
         assert_code(add_result, 0)
 
         time.sleep(10)
@@ -173,17 +173,20 @@ class TestNodeAbnormal():
         for i in range(5):
             assert_sys_blocknumber_notgrowth_sub_growth(sys_ledger, ledger_name, client_another)
 
-        global_test_env.start_designated_node(client.url)
+        global_test_env.start_designated_node(sys_consensus_client.url)
         time.sleep(30)
-        assert_blocknumber_growth(sys_ledger, ledger_name, client)
+        assert_blocknumber_growth(sys_ledger, ledger_name, client_another)
 
-        sys_updatenodetype(client)
-        client_another.ledger.terminateLedger(ledger_name, main_private_key)
+        # sys_updatenodetype(client)
+        # client_another.ledger.terminateLedger(ledger_name, main_private_key)
 
 
 
     def test_sysconsensus_node_abnormal_notaffect_subledger_wait_settlement(self, clients, global_test_env):
-        client = clients[0]
+        # client = clients[0]
+        for i in range(len(clients)):
+            if clients[i].url == 'http://192.168.16.121:7789':
+                client, client_another = clients[i], clients[i + 1]
         node_list = client.node.listAll()
         data = json.loads(node_list[0])['data']
         node_name_list = [data[i]['name'] for i in range(len(data))]
@@ -191,9 +194,9 @@ class TestNodeAbnormal():
         for name in need_update_nodelist:
             result = client.node.updateType(name, 2, main_private_key)
             assert_code(result, 0)
-        for i in range(len(clients)):
-            if clients[i].url == 'http://192.168.16.121:7789':
-                sys_consensus_client, client_another = clients[i], clients[i + 1]
+        # for i in range(len(clients)):
+        #     if clients[i].url == 'http://192.168.16.121:7789':
+        #         sys_consensus_client, client_another = clients[i], clients[i + 1]
         time.sleep(20)
         ledger_name, sub_ledger_node = create_oneledger(client_another)
         join_result = client.ledger.joinLedger(ledger_name, client.node_id, client.node_pubkey, main_private_key)
@@ -202,18 +205,16 @@ class TestNodeAbnormal():
         add_result = sub_ledger_node.add(client.node_id, client.node_pubkey, main_private_key)
         assert_code(add_result, 0)
         time.sleep(10)
-        global_test_env.stop_designated_node(sys_consensus_client.url)
+        global_test_env.stop_designated_node(client.url)
         for i in range(5):
             assert_sys_blocknumber_notgrowth_sub_growth(sys_ledger, ledger_name, client_another)
         wait_settlement(client_another.platone, ledger=ledger_name, settlement=1)
         global_test_env.start_designated_node(client.url)
         time.sleep(30)
-        assert_blocknumber_growth(sys_ledger, ledger_name, client)
+        assert_blocknumber_growth(sys_ledger, ledger_name, client_another)
 
-        sys_updatenodetype(client)
-        client_another.ledger.terminateLedger(ledger_name, main_private_key)
-
-
+        # sys_updatenodetype(client)
+        # client_another.ledger.terminateLedger(ledger_name, main_private_key)
 
 
 
@@ -247,29 +248,29 @@ class TestNodeAbnormal():
 
 
     def test_sysconsensus_node_abnormal_taffect_subledger_wait_settlement(self, clients, global_test_env):
-        client = clients[0]
-        node_list = client.node.listAll()
+        for i in range(len(clients)):
+            if clients[i].url == 'http://192.168.16.121:7789':
+                sys_consensus_client, client_another = clients[i], clients[i + 1]
+        node_list = sys_consensus_client.node.listAll()
         data = json.loads(node_list[0])['data']
         node_name_list = [data[i]['name'] for i in range(len(data))]
         need_update_nodelist = [name for name in node_name_list if name[-4:] == '7789']
         for name in need_update_nodelist:
-            result = client.node.updateType(name, 2, main_private_key)
+            result = sys_consensus_client.node.updateType(name, 2, main_private_key)
             assert_code(result, 0)
-        for i in range(len(clients)):
-            if clients[i].url == 'http://192.168.16.121:7789':
-                sys_consensus_client, client_another = clients[i], clients[i + 1]
         time.sleep(20)
-        ledger_name, sub_ledger_node = create_twonodes_ledger(sys_consensus_client, client_another)
+        ledger_name, sub_ledger_node, _ = create_twonodes_ledger(sys_consensus_client, client_another)
         time.sleep(10)
 
-        wait_settlement(client.platone, sys_ledger, settlement=1)
+        wait_settlement(sys_consensus_client.platone, sys_ledger, settlement=1)
         global_test_env.stop_designated_node(sys_consensus_client.url)
         for i in range(5):
+            time.sleep(5)
             assert_sys_sub_blocknumber_notgrowth(sys_ledger, ledger_name, client_another)
 
         global_test_env.start_designated_node(sys_consensus_client.url)
         time.sleep(30)
-        assert_blocknumber_growth(sys_ledger, ledger_name, client)
+        assert_blocknumber_growth(sys_ledger, ledger_name, client_another)
 
         sys_updatenodetype(client)
         client_another.ledger.terminateLedger(ledger_name, main_private_key)
@@ -298,9 +299,8 @@ class TestNodeAbnormal():
             assert_sys_blocknumber_notgrowth_sub_growth(sys_ledger, ledger_name, client)
 
         global_test_env.start_designated_node(client_another.url)
-        assert_sys_blocknumber_notgrowth_sub_growth(sys_ledger, ledger_name, client)
 
-        time.sleep(20)
+        time.sleep(30)
         assert_blocknumber_growth(sys_ledger, ledger_name, client)
 
         global_test_env.start_designated_node(client_another2.url)
@@ -329,8 +329,8 @@ class TestNodeAbnormal():
         add_result = sub_ledger_node.add(sys_consensus_client.node_id, sys_consensus_client.node_pubkey, main_private_key)
         assert_code(add_result, 0)
 
-        time.sleep(10)
         global_test_env.stop_designated_node(sys_consensus_client.url)
+        time.sleep(10)
         for i in range(5):
             assert_blocknumber_growth(sys_ledger, ledger_name, client_another)
         global_test_env.start_designated_node(client.url)
